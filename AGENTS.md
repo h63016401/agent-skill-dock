@@ -1,6 +1,6 @@
 # Agent Skill Dock - AI Handoff Notes
 
-這份檔案是給之後接手本專案的 AI coding agent 看的。請先讀完本檔，再讀 `README.md`、`skills.json`、`PROJECT_PLAN.md`。
+這份檔案是給之後接手本專案的 AI coding agent 看的。請先讀完本檔，再讀 `README.md`、`skills.json`、`PROJECT_PLAN.md`、`CANDIDATE_SKILLS.md`。
 
 ## 專案目標
 
@@ -34,6 +34,7 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
 - `skills.json`：初始技能 manifest。
 - `adapters/website-cloner-template/SKILL.md`：AI Website Cloner Template adapter skill。
 - `PROJECT_PLAN.md`：完整規劃、架構與未來 roadmap。
+- `CANDIDATE_SKILLS.md`：已查到但尚未納入一鍵安裝的候選技能。
 
 尚未完成：
 
@@ -73,6 +74,10 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
 - `PROJECT_PLAN.md`
   - 面向專案規劃。
   - 放完整架構、manifest 草案、CLI roadmap、後續 phase。
+
+- `CANDIDATE_SKILLS.md`
+  - 面向下一階段擴充。
+  - 放已查證的線上技能來源、安裝方式、風險與建議整合順序。
 
 - `skills.json`
   - 技能來源清單。

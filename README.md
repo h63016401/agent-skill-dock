@@ -132,6 +132,8 @@ npx agent-skill-dock doctor
 
 給 AI coding agent 接手用的專案說明請看 [AGENTS.md](./AGENTS.md)。
 
+之後要納入的一鍵安裝候選技能請看 [CANDIDATE_SKILLS.md](./CANDIDATE_SKILLS.md)。
+
 ## License
 
 MIT
