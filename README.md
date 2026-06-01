@@ -71,6 +71,8 @@ irm https://raw.githubusercontent.com/h63016401/agent-skill-dock/main/install.ps
 
 `Motion AI Kit` 需要 Motion token / Motion+，目前不列入預設一鍵安裝；之後會做成選配 external installer。
 
+每個 skill 的原始來源、特色、適合場景與提示範例請看 [SKILL_CATALOG.md](./SKILL_CATALOG.md)。
+
 ## 預設安裝位置
 
 Claude Code:
@@ -146,6 +148,8 @@ npx agent-skill-dock doctor
 完整規劃請看 [PROJECT_PLAN.md](./PROJECT_PLAN.md)。
 
 給 AI coding agent 接手用的專案說明請看 [AGENTS.md](./AGENTS.md)。
+
+完整技能介紹與用法請看 [SKILL_CATALOG.md](./SKILL_CATALOG.md)。
 
 之後要納入的一鍵安裝候選技能請看 [CANDIDATE_SKILLS.md](./CANDIDATE_SKILLS.md)。
 

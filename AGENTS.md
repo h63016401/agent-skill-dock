@@ -1,6 +1,6 @@
 # Agent Skill Dock - AI Handoff Notes
 
-這份檔案是給之後接手本專案的 AI coding agent 看的。請先讀完本檔，再讀 `README.md`、`skills.json`、`PROJECT_PLAN.md`、`CANDIDATE_SKILLS.md`。
+這份檔案是給之後接手本專案的 AI coding agent 看的。請先讀完本檔，再讀 `README.md`、`skills.json`、`SKILL_CATALOG.md`、`PROJECT_PLAN.md`、`CANDIDATE_SKILLS.md`。
 
 ## 專案目標
 
@@ -32,6 +32,7 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
 - `install.sh`：macOS/Linux 安裝器。
 - `install.ps1`：Windows PowerShell 安裝器。
 - `skills.json`：正式一鍵安裝技能 manifest。
+- `SKILL_CATALOG.md`：面向使用者的技能來源、特色、適合場景與提示範例。
 - `adapters/website-cloner-template/SKILL.md`：AI Website Cloner Template adapter skill。
 - `PROJECT_PLAN.md`：完整規劃、架構與未來 roadmap。
 - `CANDIDATE_SKILLS.md`：已查到但尚未納入一鍵安裝的候選技能。
@@ -133,6 +134,10 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
 - `skills.json`
   - 技能來源清單。
   - 新增正式一鍵安裝 skill 時，優先更新這裡，並同步更新兩個安裝器。
+
+- `SKILL_CATALOG.md`
+  - 面向使用者和下一位 AI agent。
+  - 新增預設安裝技能時，必須補上原始來源網站、安裝來源、特色、適合使用情境與提示範例。
 
 - `install.sh`
   - macOS/Linux bootstrap installer。
