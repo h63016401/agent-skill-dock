@@ -110,6 +110,8 @@ Codex compatibility path:
 ~/.codex/skills/<skill-name>/SKILL.md
 ```
 
+In user scope, installers should auto-detect an existing `~/.codex/skills` directory and install there as a compatibility target. Users can still pass `--codex-compat` / `-CodexCompat` explicitly.
+
 Project scope:
 
 ```text
@@ -162,6 +164,7 @@ AGENT_SKILL_DOCK_LOCAL_DIR="$PWD" bash install.sh --dry-run --agent codex
 - 新增任何遠端下載行為，都要能 dry-run。
 - README 裡的安裝指令必須和實際 repo URL 一致。
 - macOS/Linux 與 Windows 的功能要盡量同步。
+- 如果改動 Codex install path，記得同時考慮官方 `~/.agents/skills` 與本機相容 `~/.codex/skills`。
 - adapter skill 要明確寫出安全邊界。
 - 如果新增 npm CLI，不要移除 bootstrap scripts；保留給不想裝 npm package 的使用者。
 

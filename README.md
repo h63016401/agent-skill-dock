@@ -72,13 +72,13 @@ Codex:
 ~/.agents/skills/<skill-name>/SKILL.md
 ```
 
-如果你需要相容舊的 Codex 本機資料夾，也可以在 macOS/Linux 加上：
+如果安裝器偵測到既有 `~/.codex/skills`，會自動同步安裝到相容目錄。你也可以手動指定：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/h63016401/agent-skill-dock/main/install.sh | bash -s -- --codex-compat
 ```
 
-這會額外寫入：
+這會寫入或確認下列相容目錄：
 
 ```text
 ~/.codex/skills/<skill-name>/SKILL.md

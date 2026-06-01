@@ -155,6 +155,11 @@ try {
     $CodexCompatRoot = Join-Path (Get-Location) ".codex/skills"
   }
 
+  $AutoCodexCompat = $false
+  if ($Scope -eq "user" -and (Test-Path $CodexCompatRoot -PathType Container)) {
+    $AutoCodexCompat = $true
+  }
+
   if ($Agent -eq "claude" -or $Agent -eq "both") {
     Install-ToRoot -TargetRoot $ClaudeRoot
   }
@@ -163,7 +168,10 @@ try {
     Install-ToRoot -TargetRoot $CodexRoot
   }
 
-  if ($CodexCompat) {
+  if ($CodexCompat -or ($AutoCodexCompat -and ($Agent -eq "codex" -or $Agent -eq "both"))) {
+    if (-not $CodexCompat) {
+      Write-Host "Detected existing Codex compatibility path: $CodexCompatRoot"
+    }
     Install-ToRoot -TargetRoot $CodexCompatRoot
   }
 

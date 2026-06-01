@@ -21,6 +21,7 @@ Options:
   --dry-run                            Show planned writes without changing files
   --force                              Backup and replace existing installed skills
   --codex-compat                       Also install to ~/.codex/skills
+                                       Auto-detected in user scope when ~/.codex/skills exists
   -h, --help                           Show help
 USAGE
 }
@@ -191,6 +192,11 @@ else
   CODEX_COMPAT_ROOT="$PWD/.codex/skills"
 fi
 
+AUTO_CODEX_COMPAT=0
+if [[ "$SCOPE" == "user" && -d "$CODEX_COMPAT_ROOT" ]]; then
+  AUTO_CODEX_COMPAT=1
+fi
+
 if [[ "$AGENT" == "claude" || "$AGENT" == "both" ]]; then
   install_to_root "$CLAUDE_ROOT"
 fi
@@ -199,7 +205,10 @@ if [[ "$AGENT" == "codex" || "$AGENT" == "both" ]]; then
   install_to_root "$CODEX_ROOT"
 fi
 
-if [[ "$CODEX_COMPAT" -eq 1 ]]; then
+if [[ "$CODEX_COMPAT" -eq 1 || ( "$AUTO_CODEX_COMPAT" -eq 1 && ( "$AGENT" == "codex" || "$AGENT" == "both" ) ) ]]; then
+  if [[ "$CODEX_COMPAT" -ne 1 ]]; then
+    echo "Detected existing Codex compatibility path: $CODEX_COMPAT_ROOT"
+  fi
   install_to_root "$CODEX_COMPAT_ROOT"
 fi
 
