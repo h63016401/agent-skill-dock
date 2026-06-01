@@ -94,11 +94,48 @@ else
   git clone --depth 1 "$REPO_URL" "$DOCK_DIR" >/dev/null
 fi
 
+clone_repo() {
+  local repo="$1"
+  local dest="$2"
+  git clone --depth 1 "$repo" "$dest" >/dev/null
+}
+
+clone_repo_sparse() {
+  local repo="$1"
+  local dest="$2"
+  shift 2
+  git clone --depth 1 --filter=blob:none --sparse "$repo" "$dest" >/dev/null
+  (cd "$dest" && git sparse-checkout set "$@" >/dev/null)
+}
+
 ANTHROPIC_DIR="$TMP_DIR/anthropics-skills"
 VERCEL_DIR="$TMP_DIR/vercel-agent-skills"
+IMPECCABLE_DIR="$TMP_DIR/impeccable"
+TASTE_DIR="$TMP_DIR/taste-skill"
+UI_SKILLS_DIR="$TMP_DIR/ui-skills"
+JSCRAIK_DIR="$TMP_DIR/jscraik-agent-skills"
+STITCH_DIR="$TMP_DIR/stitch-skills"
 
-git clone --depth 1 https://github.com/anthropics/skills.git "$ANTHROPIC_DIR" >/dev/null
-git clone --depth 1 https://github.com/vercel-labs/agent-skills.git "$VERCEL_DIR" >/dev/null
+clone_repo https://github.com/anthropics/skills.git "$ANTHROPIC_DIR"
+clone_repo https://github.com/vercel-labs/agent-skills.git "$VERCEL_DIR"
+clone_repo_sparse https://github.com/pbakaus/impeccable.git "$IMPECCABLE_DIR" \
+  .agents/skills/impeccable \
+  .claude/skills/impeccable \
+  plugin/skills/impeccable
+clone_repo_sparse https://github.com/Leonxlnx/taste-skill.git "$TASTE_DIR" \
+  skills/taste-skill \
+  skills/gpt-tasteskill \
+  skills/redesign-skill \
+  skills/soft-skill
+clone_repo_sparse https://github.com/ibelick/ui-skills.git "$UI_SKILLS_DIR" \
+  skills/baseline-ui \
+  skills/fixing-accessibility \
+  skills/fixing-metadata \
+  skills/fixing-motion-performance
+clone_repo_sparse https://github.com/jscraik/Agent-Skills.git "$JSCRAIK_DIR" \
+  Skills/frontend-ui/better-icons
+clone_repo_sparse https://github.com/google-labs-code/stitch-skills.git "$STITCH_DIR" \
+  plugins/stitch-utilities/skills/design-md
 
 write_metadata() {
   local dest="$1"
@@ -156,6 +193,17 @@ copy_skill() {
 
 install_to_root() {
   local target_root="$1"
+  local target_agent="${2:-generic}"
+  local impeccable_source="$IMPECCABLE_DIR/plugin/skills/impeccable"
+  local impeccable_source_path="plugin/skills/impeccable"
+
+  if [[ "$target_agent" == "claude" && -d "$IMPECCABLE_DIR/.claude/skills/impeccable" ]]; then
+    impeccable_source="$IMPECCABLE_DIR/.claude/skills/impeccable"
+    impeccable_source_path=".claude/skills/impeccable"
+  elif [[ "$target_agent" == "codex" && -d "$IMPECCABLE_DIR/.agents/skills/impeccable" ]]; then
+    impeccable_source="$IMPECCABLE_DIR/.agents/skills/impeccable"
+    impeccable_source_path=".agents/skills/impeccable"
+  fi
 
   copy_skill "frontend-design" \
     "$ANTHROPIC_DIR/skills/frontend-design" \
@@ -180,6 +228,72 @@ install_to_root() {
     "$target_root" \
     "JCodesMore/ai-website-cloner-template" \
     "."
+
+  copy_skill "impeccable" \
+    "$impeccable_source" \
+    "$target_root" \
+    "pbakaus/impeccable" \
+    "$impeccable_source_path"
+
+  copy_skill "design-taste-frontend" \
+    "$TASTE_DIR/skills/taste-skill" \
+    "$target_root" \
+    "Leonxlnx/taste-skill" \
+    "skills/taste-skill"
+
+  copy_skill "gpt-taste" \
+    "$TASTE_DIR/skills/gpt-tasteskill" \
+    "$target_root" \
+    "Leonxlnx/taste-skill" \
+    "skills/gpt-tasteskill"
+
+  copy_skill "redesign-existing-projects" \
+    "$TASTE_DIR/skills/redesign-skill" \
+    "$target_root" \
+    "Leonxlnx/taste-skill" \
+    "skills/redesign-skill"
+
+  copy_skill "high-end-visual-design" \
+    "$TASTE_DIR/skills/soft-skill" \
+    "$target_root" \
+    "Leonxlnx/taste-skill" \
+    "skills/soft-skill"
+
+  copy_skill "baseline-ui" \
+    "$UI_SKILLS_DIR/skills/baseline-ui" \
+    "$target_root" \
+    "ibelick/ui-skills" \
+    "skills/baseline-ui"
+
+  copy_skill "fixing-accessibility" \
+    "$UI_SKILLS_DIR/skills/fixing-accessibility" \
+    "$target_root" \
+    "ibelick/ui-skills" \
+    "skills/fixing-accessibility"
+
+  copy_skill "fixing-metadata" \
+    "$UI_SKILLS_DIR/skills/fixing-metadata" \
+    "$target_root" \
+    "ibelick/ui-skills" \
+    "skills/fixing-metadata"
+
+  copy_skill "fixing-motion-performance" \
+    "$UI_SKILLS_DIR/skills/fixing-motion-performance" \
+    "$target_root" \
+    "ibelick/ui-skills" \
+    "skills/fixing-motion-performance"
+
+  copy_skill "better-icons" \
+    "$JSCRAIK_DIR/Skills/frontend-ui/better-icons" \
+    "$target_root" \
+    "jscraik/Agent-Skills" \
+    "Skills/frontend-ui/better-icons"
+
+  copy_skill "design-md" \
+    "$STITCH_DIR/plugins/stitch-utilities/skills/design-md" \
+    "$target_root" \
+    "google-labs-code/stitch-skills" \
+    "plugins/stitch-utilities/skills/design-md"
 }
 
 if [[ "$SCOPE" == "user" ]]; then
@@ -198,18 +312,18 @@ if [[ "$SCOPE" == "user" && -d "$CODEX_COMPAT_ROOT" ]]; then
 fi
 
 if [[ "$AGENT" == "claude" || "$AGENT" == "both" ]]; then
-  install_to_root "$CLAUDE_ROOT"
+  install_to_root "$CLAUDE_ROOT" "claude"
 fi
 
 if [[ "$AGENT" == "codex" || "$AGENT" == "both" ]]; then
-  install_to_root "$CODEX_ROOT"
+  install_to_root "$CODEX_ROOT" "codex"
 fi
 
 if [[ "$CODEX_COMPAT" -eq 1 || ( "$AUTO_CODEX_COMPAT" -eq 1 && ( "$AGENT" == "codex" || "$AGENT" == "both" ) ) ]]; then
   if [[ "$CODEX_COMPAT" -ne 1 ]]; then
     echo "Detected existing Codex compatibility path: $CODEX_COMPAT_ROOT"
   fi
-  install_to_root "$CODEX_COMPAT_ROOT"
+  install_to_root "$CODEX_COMPAT_ROOT" "codex"
 fi
 
 if [[ "$DRY_RUN" -eq 1 ]]; then

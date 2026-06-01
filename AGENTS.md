@@ -31,7 +31,7 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
 - `README.md`：使用者說明與一鍵安裝指令。
 - `install.sh`：macOS/Linux 安裝器。
 - `install.ps1`：Windows PowerShell 安裝器。
-- `skills.json`：初始技能 manifest。
+- `skills.json`：正式一鍵安裝技能 manifest。
 - `adapters/website-cloner-template/SKILL.md`：AI Website Cloner Template adapter skill。
 - `PROJECT_PLAN.md`：完整規劃、架構與未來 roadmap。
 - `CANDIDATE_SKILLS.md`：已查到但尚未納入一鍵安裝的候選技能。
@@ -46,7 +46,7 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
 
 ## 初始技能
 
-目前安裝器會安裝四個項目：
+目前安裝器會安裝以下公開、免 token 的技能：
 
 - `frontend-design`
   - 來源：`anthropics/skills`, path `skills/frontend-design`
@@ -65,6 +65,57 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
   - 上游 template：`JCodesMore/ai-website-cloner-template`
   - 用途：引導 agent 使用授權網站重建 template。
 
+- `impeccable`
+  - 來源：`pbakaus/impeccable`
+  - 用途：增強版 frontend design、audit、polish、anti-generic UI skill。
+
+- `design-taste-frontend`
+  - 來源：`Leonxlnx/taste-skill`, path `skills/taste-skill`
+  - 用途：提升前端審美、版面、字體、動效與 visual direction。
+
+- `gpt-taste`
+  - 來源：`Leonxlnx/taste-skill`, path `skills/gpt-tasteskill`
+  - 用途：給 GPT/Codex 更嚴格的前端 taste 與 motion/layout 規則。
+
+- `redesign-existing-projects`
+  - 來源：`Leonxlnx/taste-skill`, path `skills/redesign-skill`
+  - 用途：針對既有網站/APP 做 UI audit 與 redesign。
+
+- `high-end-visual-design`
+  - 來源：`Leonxlnx/taste-skill`, path `skills/soft-skill`
+  - 用途：高級感視覺設計，包含字體、留白、卡片、陰影與動效。
+
+- `baseline-ui`
+  - 來源：`ibelick/ui-skills`, path `skills/baseline-ui`
+  - 用途：UI 工程 baseline、排版比例、動效時長、可及性與 layout 檢查。
+
+- `fixing-accessibility`
+  - 來源：`ibelick/ui-skills`, path `skills/fixing-accessibility`
+  - 用途：修正 ARIA、鍵盤導覽、focus、contrast、表單等 accessibility 問題。
+
+- `fixing-metadata`
+  - 來源：`ibelick/ui-skills`, path `skills/fixing-metadata`
+  - 用途：修正 SEO metadata、社群分享卡片與頁面資訊。
+
+- `fixing-motion-performance`
+  - 來源：`ibelick/ui-skills`, path `skills/fixing-motion-performance`
+  - 用途：修正動畫 jank、layout thrashing、scroll-linked motion、blur 效能問題。
+
+- `better-icons`
+  - 來源：`jscraik/Agent-Skills`, path `Skills/frontend-ui/better-icons`
+  - 用途：圖標搜尋、選型與 SVG/icon family 一致性工作流。
+  - 注意：目前只安裝 skill，不自動修改 MCP 設定。
+
+- `design-md`
+  - 來源：`google-labs-code/stitch-skills`, path `plugins/stitch-utilities/skills/design-md`
+  - 用途：產生/維護 DESIGN.md 設計系統文件。
+  - 注意：實際使用時通常需要 Stitch 專案或 Stitch MCP context。
+
+目前不預設安裝：
+
+- `motion-ai-kit`
+  - 原因：需要 Motion token / Motion+，之後應做成 optional external installer。
+
 ## 重要檔案
 
 - `README.md`
@@ -81,7 +132,7 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
 
 - `skills.json`
   - 技能來源清單。
-  - 新增 skill 時，優先更新這裡。
+  - 新增正式一鍵安裝 skill 時，優先更新這裡，並同步更新兩個安裝器。
 
 - `install.sh`
   - macOS/Linux bootstrap installer。

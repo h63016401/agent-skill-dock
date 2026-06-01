@@ -2,18 +2,23 @@
 
 Research date: 2026-06-02, Asia/Taipei.
 
-This file tracks online skill candidates that should be considered for future one-click installation. These are not active in `install.sh` / `install.ps1` yet unless they are also listed in `skills.json`.
+This file tracks online skill candidates that should be considered for future one-click installation. Candidates are active only when they are also listed in `skills.json` and wired into `install.sh` / `install.ps1`.
+
+Current promotion status:
+
+- Promoted to default install: `impeccable`, Taste curated set, UI Skills repo set, `better-icons`, `design-md`.
+- Still optional/external: Motion AI Kit, because it requires a Motion token / Motion+ access.
 
 ## Summary
 
 | User label | Found? | Canonical name | Source | Install readiness |
 | --- | --- | --- | --- | --- |
-| `lmpeccable` | Yes, likely typo | `impeccable` | https://github.com/pbakaus/impeccable | High |
-| Taste Skill | Yes | `design-taste-frontend` and related skills | https://github.com/Leonxlnx/taste-skill | High |
-| UI Skills | Yes | `baseline-ui`, `fixing-accessibility`, `fixing-metadata`, `fixing-motion-performance` | https://github.com/ibelick/ui-skills | High |
+| `lmpeccable` | Yes, likely typo | `impeccable` | https://github.com/pbakaus/impeccable | Promoted |
+| Taste Skill | Yes | `design-taste-frontend` and related skills | https://github.com/Leonxlnx/taste-skill | Curated set promoted |
+| UI Skills | Yes | `baseline-ui`, `fixing-accessibility`, `fixing-metadata`, `fixing-motion-performance` | https://github.com/ibelick/ui-skills | Promoted |
 | Motion AI Kit | Yes | Motion AI Kit / `motion-ai` | https://motion.dev/docs/ai-kit-install | Conditional: needs Motion token |
-| Better Icons | Yes | `better-icons` | https://github.com/jscraik/Agent-Skills and https://www.npmjs.com/package/better-icons | Medium: skill + optional MCP/CLI |
-| `DESIGN.md` | Yes | `design-md` and DESIGN.md format | https://github.com/google-labs-code/stitch-skills | Medium: Stitch-dependent |
+| Better Icons | Yes | `better-icons` | https://github.com/jscraik/Agent-Skills and https://www.npmjs.com/package/better-icons | Skill promoted, MCP optional |
+| `DESIGN.md` | Yes | `design-md` and DESIGN.md format | https://github.com/google-labs-code/stitch-skills | Promoted, Stitch-dependent |
 
 ## 1. Impeccable
 

@@ -64,6 +64,186 @@
       "categories": ["template", "website", "nextjs", "agent-workflow"],
       "summary": "Adapter skill that guides agents through the AI website cloning template workflow.",
       "license": "MIT"
+    },
+    {
+      "id": "impeccable",
+      "displayName": "Impeccable",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "pbakaus/impeccable",
+        "ref": "main",
+        "path": "plugin/skills/impeccable",
+        "agentPaths": {
+          "claude": ".claude/skills/impeccable",
+          "codex": ".agents/skills/impeccable"
+        }
+      },
+      "agents": ["claude", "codex"],
+      "aliases": ["lmpeccable"],
+      "categories": ["frontend", "design", "ui", "audit"],
+      "summary": "Enhanced frontend design skill for production-grade UI design, audits, polish, and anti-generic interfaces.",
+      "license": "see-upstream"
+    },
+    {
+      "id": "design-taste-frontend",
+      "displayName": "Taste Skill",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "Leonxlnx/taste-skill",
+        "ref": "main",
+        "path": "skills/taste-skill"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": ["taste-skill"],
+      "categories": ["frontend", "design", "ui", "taste"],
+      "summary": "Anti-slop frontend skill for stronger layout, typography, motion, spacing, and visual direction.",
+      "license": "MIT"
+    },
+    {
+      "id": "gpt-taste",
+      "displayName": "GPT Taste",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "Leonxlnx/taste-skill",
+        "ref": "main",
+        "path": "skills/gpt-tasteskill"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "design", "ui", "codex"],
+      "summary": "Stricter GPT/Codex-oriented frontend taste rules with stronger motion and layout enforcement.",
+      "license": "MIT"
+    },
+    {
+      "id": "redesign-existing-projects",
+      "displayName": "Redesign Existing Projects",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "Leonxlnx/taste-skill",
+        "ref": "main",
+        "path": "skills/redesign-skill"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": ["redesign-skill"],
+      "categories": ["frontend", "design", "redesign", "audit"],
+      "summary": "Audit and upgrade existing websites or apps from generic UI toward premium visual quality.",
+      "license": "MIT"
+    },
+    {
+      "id": "high-end-visual-design",
+      "displayName": "High-End Visual Design",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "Leonxlnx/taste-skill",
+        "ref": "main",
+        "path": "skills/soft-skill"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": ["soft-skill"],
+      "categories": ["frontend", "design", "visual-polish"],
+      "summary": "Premium visual design guidance for refined typography, whitespace, cards, shadows, and motion.",
+      "license": "MIT"
+    },
+    {
+      "id": "baseline-ui",
+      "displayName": "Baseline UI",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "ibelick/ui-skills",
+        "ref": "main",
+        "path": "skills/baseline-ui"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "ui-engineering", "accessibility"],
+      "summary": "Validate animation durations, typography scale, accessibility, and layout consistency in UI work.",
+      "license": "MIT"
+    },
+    {
+      "id": "fixing-accessibility",
+      "displayName": "Fixing Accessibility",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "ibelick/ui-skills",
+        "ref": "main",
+        "path": "skills/fixing-accessibility"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "accessibility", "ui-engineering"],
+      "summary": "Audit and fix HTML accessibility issues including ARIA, keyboard navigation, contrast, and focus states.",
+      "license": "MIT"
+    },
+    {
+      "id": "fixing-metadata",
+      "displayName": "Fixing Metadata",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "ibelick/ui-skills",
+        "ref": "main",
+        "path": "skills/fixing-metadata"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "seo", "metadata", "ui-engineering"],
+      "summary": "Improve page metadata, SEO tags, social cards, and share-preview details.",
+      "license": "MIT"
+    },
+    {
+      "id": "fixing-motion-performance",
+      "displayName": "Fixing Motion Performance",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "ibelick/ui-skills",
+        "ref": "main",
+        "path": "skills/fixing-motion-performance"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "motion", "performance", "ui-engineering"],
+      "summary": "Audit and fix animation performance issues such as layout thrashing, scroll-linked motion, and blur jank.",
+      "license": "MIT"
+    },
+    {
+      "id": "better-icons",
+      "displayName": "Better Icons",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "jscraik/Agent-Skills",
+        "ref": "main",
+        "path": "Skills/frontend-ui/better-icons"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": ["frontend-ui-better-icons"],
+      "categories": ["frontend", "icons", "ui"],
+      "summary": "Search, compare, and extract SVG icons while keeping icon families and UI usage consistent.",
+      "license": "see-upstream"
+    },
+    {
+      "id": "design-md",
+      "displayName": "Design MD",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "google-labs-code/stitch-skills",
+        "ref": "main",
+        "path": "plugins/stitch-utilities/skills/design-md"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": ["DESIGN.md"],
+      "categories": ["frontend", "design-system", "documentation"],
+      "summary": "Analyze Stitch projects and synthesize semantic DESIGN.md files for reusable design-system guidance.",
+      "license": "Apache-2.0"
     }
   ]
 }
