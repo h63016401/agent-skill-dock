@@ -130,6 +130,8 @@ npx agent-skill-dock doctor
 
 完整規劃請看 [PROJECT_PLAN.md](./PROJECT_PLAN.md)。
 
+給 AI coding agent 接手用的專案說明請看 [AGENTS.md](./AGENTS.md)。
+
 ## License
 
 MIT
