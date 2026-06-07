@@ -112,6 +112,19 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
   - 用途：產生/維護 DESIGN.md 設計系統文件。
   - 注意：實際使用時通常需要 Stitch 專案或 Stitch MCP context。
 
+- `find-skills`
+  - 來源：`vercel-labs/skills`, path `skills/find-skills`
+  - 用途：搜尋、評估並安裝 open agent skills 生態中的技能。
+
+- `code-simplifier`
+  - 來源：`getsentry/skills`, path `skills/code-simplifier`
+  - 用途：在保留功能與行為的前提下，簡化近期修改的程式碼。
+
+- `skill-creator`
+  - 來源：`anthropics/skills`, path `skills/skill-creator`
+  - 用途：建立、改善、測試、評估、benchmark 與封裝 agent skills。
+  - 注意：進階 eval 流程可能需要 Python、對應 agent CLI 或 subagent 支援。
+
 目前不預設安裝：
 
 - `motion-ai-kit`

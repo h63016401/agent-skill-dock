@@ -6,7 +6,7 @@ This file tracks online skill candidates that should be considered for future on
 
 Current promotion status:
 
-- Promoted to default install: `impeccable`, Taste curated set, UI Skills repo set, `better-icons`, `design-md`.
+- Promoted to default install: `impeccable`, Taste curated set, UI Skills repo set, `better-icons`, `design-md`, `find-skills`, `code-simplifier`, `skill-creator`.
 - Still optional/external: Motion AI Kit, because it requires a Motion token / Motion+ access.
 
 ## Summary

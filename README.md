@@ -1,6 +1,6 @@
 # Agent Skill Dock
 
-一鍵安裝常用 AI coding-agent skills，集中管理 Claude Code、Codex 會用到的前端設計、React/Next.js、React Native/Expo 與網站重建工作流。
+一鍵安裝常用 AI coding-agent skills，集中管理 Claude Code、Codex 會用到的前端設計、程式碼品質、技能探索與建立、React/Next.js、React Native/Expo 與網站重建工作流。
 
 > Status: bootstrap version. 目前先提供 GitHub raw script 一鍵安裝；之後會補上 npm CLI：`npx agent-skill-dock install --all`。
 
@@ -68,6 +68,9 @@ irm https://raw.githubusercontent.com/h63016401/agent-skill-dock/main/install.ps
 | `fixing-motion-performance` | 修正動畫 jank、layout thrashing、scroll-linked motion、blur 效能問題 | https://github.com/ibelick/ui-skills |
 | `better-icons` | 圖標搜尋、選型與 SVG/icon family 一致性工作流 | https://github.com/jscraik/Agent-Skills |
 | `design-md` | 產生/維護 DESIGN.md 設計系統文件 | https://github.com/google-labs-code/stitch-skills |
+| `find-skills` | 搜尋、評估並安裝 open agent skills 生態中的技能 | https://github.com/vercel-labs/skills |
+| `code-simplifier` | 在保留行為的前提下簡化近期修改的程式碼 | https://github.com/getsentry/skills |
+| `skill-creator` | 建立、改善、測試、評估與封裝 agent skills | https://github.com/anthropics/skills |
 
 `Motion AI Kit` 需要 Motion token / Motion+，目前不列入預設一鍵安裝；之後會做成選配 external installer。
 
@@ -142,6 +145,8 @@ npx agent-skill-dock doctor
 - `website-cloner-template` 只應用於你擁有、被授權、或合法學習研究的網站，不應用於 phishing、冒充品牌、侵犯版權或違反網站服務條款的用途。
 - `better-icons` 目前只安裝 skill，不會自動修改 MCP 設定；MCP/CLI 可之後用 `npx better-icons setup` 選配。
 - `design-md` 可安裝但實際使用時通常需要 Stitch 專案或 Stitch MCP context。
+- `find-skills` 可能推薦其他第三方 skill；安裝前仍應檢查來源、內容、授權與維護狀態。
+- `skill-creator` 的基本撰寫流程可直接使用，但進階 eval、benchmark 與 viewer 可能需要 Python、對應 agent CLI 或 subagent 支援。
 
 ## 專案規劃
 

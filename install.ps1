@@ -242,6 +242,27 @@ function Install-ToRoot {
     -TargetRoot $TargetRoot `
     -SourceRepo "google-labs-code/stitch-skills" `
     -SourcePath "plugins/stitch-utilities/skills/design-md"
+
+  Copy-AgentSkill `
+    -SkillId "find-skills" `
+    -SourceDir (Join-Path $VercelSkillsDir "skills/find-skills") `
+    -TargetRoot $TargetRoot `
+    -SourceRepo "vercel-labs/skills" `
+    -SourcePath "skills/find-skills"
+
+  Copy-AgentSkill `
+    -SkillId "code-simplifier" `
+    -SourceDir (Join-Path $SentrySkillsDir "skills/code-simplifier") `
+    -TargetRoot $TargetRoot `
+    -SourceRepo "getsentry/skills" `
+    -SourcePath "skills/code-simplifier"
+
+  Copy-AgentSkill `
+    -SkillId "skill-creator" `
+    -SourceDir (Join-Path $AnthropicDir "skills/skill-creator") `
+    -TargetRoot $TargetRoot `
+    -SourceRepo "anthropics/skills" `
+    -SourcePath "skills/skill-creator"
 }
 
 try {
@@ -263,6 +284,8 @@ try {
   $UiSkillsDir = Join-Path $TmpDir "ui-skills"
   $JscraikDir = Join-Path $TmpDir "jscraik-agent-skills"
   $StitchDir = Join-Path $TmpDir "stitch-skills"
+  $VercelSkillsDir = Join-Path $TmpDir "vercel-skills"
+  $SentrySkillsDir = Join-Path $TmpDir "sentry-skills"
 
   Invoke-GitClone -Repo "https://github.com/anthropics/skills.git" -Destination $AnthropicDir
   Invoke-GitClone -Repo "https://github.com/vercel-labs/agent-skills.git" -Destination $VercelDir
@@ -288,6 +311,12 @@ try {
   )
   Invoke-GitCloneSparse -Repo "https://github.com/google-labs-code/stitch-skills.git" -Destination $StitchDir -Paths @(
     "plugins/stitch-utilities/skills/design-md"
+  )
+  Invoke-GitCloneSparse -Repo "https://github.com/vercel-labs/skills.git" -Destination $VercelSkillsDir -Paths @(
+    "skills/find-skills"
+  )
+  Invoke-GitCloneSparse -Repo "https://github.com/getsentry/skills.git" -Destination $SentrySkillsDir -Paths @(
+    "skills/code-simplifier"
   )
 
   if ($Scope -eq "user") {

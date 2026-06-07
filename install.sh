@@ -115,6 +115,8 @@ TASTE_DIR="$TMP_DIR/taste-skill"
 UI_SKILLS_DIR="$TMP_DIR/ui-skills"
 JSCRAIK_DIR="$TMP_DIR/jscraik-agent-skills"
 STITCH_DIR="$TMP_DIR/stitch-skills"
+VERCEL_SKILLS_DIR="$TMP_DIR/vercel-skills"
+SENTRY_SKILLS_DIR="$TMP_DIR/sentry-skills"
 
 clone_repo https://github.com/anthropics/skills.git "$ANTHROPIC_DIR"
 clone_repo https://github.com/vercel-labs/agent-skills.git "$VERCEL_DIR"
@@ -136,6 +138,10 @@ clone_repo_sparse https://github.com/jscraik/Agent-Skills.git "$JSCRAIK_DIR" \
   Skills/frontend-ui/better-icons
 clone_repo_sparse https://github.com/google-labs-code/stitch-skills.git "$STITCH_DIR" \
   plugins/stitch-utilities/skills/design-md
+clone_repo_sparse https://github.com/vercel-labs/skills.git "$VERCEL_SKILLS_DIR" \
+  skills/find-skills
+clone_repo_sparse https://github.com/getsentry/skills.git "$SENTRY_SKILLS_DIR" \
+  skills/code-simplifier
 
 write_metadata() {
   local dest="$1"
@@ -294,6 +300,24 @@ install_to_root() {
     "$target_root" \
     "google-labs-code/stitch-skills" \
     "plugins/stitch-utilities/skills/design-md"
+
+  copy_skill "find-skills" \
+    "$VERCEL_SKILLS_DIR/skills/find-skills" \
+    "$target_root" \
+    "vercel-labs/skills" \
+    "skills/find-skills"
+
+  copy_skill "code-simplifier" \
+    "$SENTRY_SKILLS_DIR/skills/code-simplifier" \
+    "$target_root" \
+    "getsentry/skills" \
+    "skills/code-simplifier"
+
+  copy_skill "skill-creator" \
+    "$ANTHROPIC_DIR/skills/skill-creator" \
+    "$target_root" \
+    "anthropics/skills" \
+    "skills/skill-creator"
 }
 
 if [[ "$SCOPE" == "user" ]]; then

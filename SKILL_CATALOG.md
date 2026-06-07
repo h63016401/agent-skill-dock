@@ -2,7 +2,7 @@
 
 這份文件介紹 Agent Skill Dock 目前預設一鍵安裝的 skills。重點是讓使用者和之後接手的 AI agent 快速知道：每個 skill 的原始來源在哪、特色是什麼、什麼時候該用、可以怎麼提示 AI。
 
-目前預設安裝：15 個公開、免 token 的 skills。
+目前預設安裝：18 個公開、免 token 的 skills。
 
 ## 快速使用方式
 
@@ -16,6 +16,9 @@
 請用 design-taste-frontend 重設計這個 landing page。
 請用 fixing-accessibility 檢查這個表單。
 請用 better-icons 幫我挑一組一致的 sidebar icons。
+請用 find-skills 幫我找適合做 API 文件的 skill。
+請用 code-simplifier 整理我剛修改的程式碼。
+請用 skill-creator 幫我建立一個 release notes skill。
 ```
 
 不同 agent 對 skill invocation 的語法可能不同；最保險的方式是直接在需求文字中寫出 skill 名稱。
@@ -39,6 +42,9 @@
 | `fixing-motion-performance` | Motion performance | 動畫 jank、layout thrashing、blur / scroll-linked motion 效能 |
 | `better-icons` | Icons | 圖標搜尋、選型、SVG 與 icon family 一致性 |
 | `design-md` | Design system | 產生/維護 DESIGN.md 設計系統文件 |
+| `find-skills` | Skill discovery | 搜尋、評估與安裝 agent skills |
+| `code-simplifier` | Code quality | 保留行為並簡化近期修改的程式碼 |
+| `skill-creator` | Skill authoring | 建立、改善、評估與封裝 agent skills |
 
 ## 1. frontend-design
 
@@ -536,6 +542,101 @@ path: plugins/stitch-utilities/skills/design-md
 
 ```text
 請使用 design-md，根據目前專案 UI 建立根目錄 DESIGN.md，包含 colors、typography、spacing、components。
+```
+
+## 16. find-skills
+
+原始來源：
+
+- GitHub: https://github.com/vercel-labs/skills/tree/main/skills/find-skills
+- Skills directory: https://skills.sh/
+
+安裝來源：
+
+```text
+vercel-labs/skills
+path: skills/find-skills
+```
+
+特色：
+
+- 協助使用者從 open agent skills 生態尋找可安裝技能。
+- 會先理解需求，再使用 Skills CLI 搜尋並檢查來源可信度、安裝數與 repo 品質。
+- 適合在現有能力不足或使用者明確想擴充 agent 時使用。
+
+適合使用：
+
+- 想知道某個工作是否已有現成 skill。
+- 想比較不同來源的同類技能。
+- 想取得 `npx skills add` 安裝指令與來源連結。
+
+提示範例：
+
+```text
+請使用 find-skills 幫我找適合 Playwright E2E 測試的 skill，先比較來源可信度再推薦。
+```
+
+## 17. code-simplifier
+
+原始來源：
+
+- GitHub: https://github.com/getsentry/skills/tree/main/skills/code-simplifier
+
+安裝來源：
+
+```text
+getsentry/skills
+path: skills/code-simplifier
+```
+
+特色：
+
+- 在保留功能、輸出與行為的前提下改善程式碼清晰度。
+- 著重降低不必要的巢狀結構、重複抽象、過度緊湊寫法與難懂命名。
+- 預設聚焦當前工作階段最近修改的程式碼，避免無限制擴大重構範圍。
+
+適合使用：
+
+- 完成功能後做 readability 與 maintainability pass。
+- 清理 nested ternary、過度抽象或難以除錯的 one-liner。
+- 希望重構但不能改變既有行為。
+
+提示範例：
+
+```text
+請使用 code-simplifier 整理這次修改過的 TypeScript 程式碼，保留所有行為並執行現有測試。
+```
+
+## 18. skill-creator
+
+原始來源：
+
+- GitHub: https://github.com/anthropics/skills/tree/main/skills/skill-creator
+
+安裝來源：
+
+```text
+anthropics/skills
+path: skills/skill-creator
+```
+
+特色：
+
+- Anthropic 的完整 skill authoring 與迭代工作流。
+- 支援建立或改善 `SKILL.md`、設計測試案例、執行 baseline 比較、benchmark 與人工 review。
+- skill 目錄包含 scripts、references、assets、agents 與 eval viewer，安裝器會完整保留。
+- 進階 eval、benchmark 與 viewer 流程可能需要 Python、對應 agent CLI 或 subagent 支援。
+
+適合使用：
+
+- 從零建立可重用的 agent skill。
+- 改善既有 skill 的觸發描述、流程或輸出品質。
+- 用測試案例與評估流程比較 skill 前後版本。
+
+提示範例：
+
+```text
+請使用 skill-creator 幫我建立一個自動產生 release notes 的 skill，包含測試案例與評估流程。
 ```
 
 ## 尚未預設安裝：Motion AI Kit

@@ -244,6 +244,54 @@
       "categories": ["frontend", "design-system", "documentation"],
       "summary": "Analyze Stitch projects and synthesize semantic DESIGN.md files for reusable design-system guidance.",
       "license": "Apache-2.0"
+    },
+    {
+      "id": "find-skills",
+      "displayName": "Find Skills",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "vercel-labs/skills",
+        "ref": "main",
+        "path": "skills/find-skills"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["skills", "discovery", "productivity"],
+      "summary": "Discover, evaluate, and install useful skills from the open agent skills ecosystem.",
+      "license": "MIT"
+    },
+    {
+      "id": "code-simplifier",
+      "displayName": "Code Simplifier",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "getsentry/skills",
+        "ref": "main",
+        "path": "skills/code-simplifier"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["code-quality", "refactoring", "maintainability"],
+      "summary": "Simplify recently modified code for clarity and maintainability while preserving behavior.",
+      "license": "Apache-2.0"
+    },
+    {
+      "id": "skill-creator",
+      "displayName": "Skill Creator",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "anthropics/skills",
+        "ref": "main",
+        "path": "skills/skill-creator"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["skills", "authoring", "evaluation"],
+      "summary": "Create, improve, evaluate, benchmark, and package agent skills.",
+      "license": "Apache-2.0"
     }
   ]
 }
