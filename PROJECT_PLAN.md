@@ -42,6 +42,8 @@ Agent Skill Dock 是一個給 AI coding agent 使用的技能集合與一鍵安�
 
 2026-06-07 更新：bootstrap 一鍵安裝已從初始 4 個項目擴充到 18 個公開、免 token 技能。除 `impeccable`、Taste Skill 精選集、UI Skills repo set、`better-icons`、`design-md` 外，也加入 `find-skills`、`code-simplifier`、`skill-creator`。`Motion AI Kit` 因需要 Motion token / Motion+，保留為未來 optional external installer。
 
+2026-10-16 更新：依本機 Codex session 的實際使用頻率，加入 `ponytail`（`DietrichGebert/ponytail`）與 GSAP 官方技能組 8 個（`greensock/gsap-skills`），預設安裝數增為 27 個。`graphify` 使用頻率也很高，但它隨 PyPI 套件 `graphifyy` 發佈、由 `graphify install` 註冊，沒有可直接複製的 skill 資料夾，因此與 `Motion AI Kit` 一樣保留為 optional external installer。`humanizer-zh-tw`、`canvas-ui-design` 使用較少且有 repo-root 複製與授權問題，列入 `CANDIDATE_SKILLS.md`。
+
 ### 1. frontend-design
 
 來源：

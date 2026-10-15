@@ -263,6 +263,31 @@ function Install-ToRoot {
     -TargetRoot $TargetRoot `
     -SourceRepo "anthropics/skills" `
     -SourcePath "skills/skill-creator"
+
+  Copy-AgentSkill `
+    -SkillId "ponytail" `
+    -SourceDir (Join-Path $PonytailDir "skills/ponytail") `
+    -TargetRoot $TargetRoot `
+    -SourceRepo "DietrichGebert/ponytail" `
+    -SourcePath "skills/ponytail"
+
+  foreach ($GsapSkill in @(
+    "gsap-core",
+    "gsap-timeline",
+    "gsap-scrolltrigger",
+    "gsap-react",
+    "gsap-performance",
+    "gsap-plugins",
+    "gsap-utils",
+    "gsap-frameworks"
+  )) {
+    Copy-AgentSkill `
+      -SkillId $GsapSkill `
+      -SourceDir (Join-Path $GsapSkillsDir "skills/$GsapSkill") `
+      -TargetRoot $TargetRoot `
+      -SourceRepo "greensock/gsap-skills" `
+      -SourcePath "skills/$GsapSkill"
+  }
 }
 
 try {
@@ -286,6 +311,8 @@ try {
   $StitchDir = Join-Path $TmpDir "stitch-skills"
   $VercelSkillsDir = Join-Path $TmpDir "vercel-skills"
   $SentrySkillsDir = Join-Path $TmpDir "sentry-skills"
+  $PonytailDir = Join-Path $TmpDir "ponytail"
+  $GsapSkillsDir = Join-Path $TmpDir "gsap-skills"
 
   Invoke-GitClone -Repo "https://github.com/anthropics/skills.git" -Destination $AnthropicDir
   Invoke-GitClone -Repo "https://github.com/vercel-labs/agent-skills.git" -Destination $VercelDir
@@ -317,6 +344,19 @@ try {
   )
   Invoke-GitCloneSparse -Repo "https://github.com/getsentry/skills.git" -Destination $SentrySkillsDir -Paths @(
     "skills/code-simplifier"
+  )
+  Invoke-GitCloneSparse -Repo "https://github.com/DietrichGebert/ponytail.git" -Destination $PonytailDir -Paths @(
+    "skills/ponytail"
+  )
+  Invoke-GitCloneSparse -Repo "https://github.com/greensock/gsap-skills.git" -Destination $GsapSkillsDir -Paths @(
+    "skills/gsap-core",
+    "skills/gsap-timeline",
+    "skills/gsap-scrolltrigger",
+    "skills/gsap-react",
+    "skills/gsap-performance",
+    "skills/gsap-plugins",
+    "skills/gsap-utils",
+    "skills/gsap-frameworks"
   )
 
   if ($Scope -eq "user") {

@@ -1,6 +1,6 @@
 # Agent Skill Dock
 
-一鍵安裝常用 AI coding-agent skills，集中管理 Claude Code、Codex 會用到的前端設計、程式碼品質、技能探索與建立、React/Next.js、React Native/Expo 與網站重建工作流。
+一鍵安裝常用 AI coding-agent skills，集中管理 Claude Code、Codex 會用到的前端設計、動畫（GSAP）、程式碼品質與極簡實作、技能探索與建立、React/Next.js、React Native/Expo 與網站重建工作流。
 
 > Status: bootstrap version. 目前先提供 GitHub raw script 一鍵安裝；之後會補上 npm CLI：`npx agent-skill-dock install --all`。
 
@@ -71,8 +71,19 @@ irm https://raw.githubusercontent.com/h63016401/agent-skill-dock/main/install.ps
 | `find-skills` | 搜尋、評估並安裝 open agent skills 生態中的技能 | https://github.com/vercel-labs/skills |
 | `code-simplifier` | 在保留行為的前提下簡化近期修改的程式碼 | https://github.com/getsentry/skills |
 | `skill-creator` | 建立、改善、測試、評估與封裝 agent skills | https://github.com/anthropics/skills |
+| `ponytail` | 極簡實作模式：最小變更解決問題、YAGNI、優先標準庫、不亂加依賴 | https://github.com/DietrichGebert/ponytail |
+| `gsap-core` | GSAP 核心 API：tween、easing、stagger、matchMedia（含 reduced-motion） | https://github.com/greensock/gsap-skills |
+| `gsap-timeline` | GSAP timeline 排程、position parameter、巢狀與播放控制 | https://github.com/greensock/gsap-skills |
+| `gsap-scrolltrigger` | GSAP ScrollTrigger：捲動連動、pin、scrub、視差 | https://github.com/greensock/gsap-skills |
+| `gsap-react` | React / Next.js 使用 GSAP：`useGSAP`、refs、cleanup | https://github.com/greensock/gsap-skills |
+| `gsap-performance` | GSAP 動畫效能：優先 transform、避免 layout thrashing | https://github.com/greensock/gsap-skills |
+| `gsap-plugins` | GSAP 外掛：Flip、Draggable、SplitText、Observer 等 | https://github.com/greensock/gsap-skills |
+| `gsap-utils` | `gsap.utils` 工具函式：clamp、mapRange、snap、wrap 等 | https://github.com/greensock/gsap-skills |
+| `gsap-frameworks` | Vue / Nuxt / Svelte / SvelteKit 使用 GSAP：生命週期與 cleanup | https://github.com/greensock/gsap-skills |
 
 `Motion AI Kit` 需要 Motion token / Motion+，目前不列入預設一鍵安裝；之後會做成選配 external installer。
+
+`graphify`（把程式碼、文件、PDF 轉成可查詢的知識圖譜）也不列入預設一鍵安裝：它跟隨 PyPI 套件 `graphifyy` 發佈，需用其官方 CLI 註冊技能。選配安裝方式請看 [SKILL_CATALOG.md](./SKILL_CATALOG.md#尚未預設安裝graphify)。
 
 每個 skill 的原始來源、特色、適合場景與提示範例請看 [SKILL_CATALOG.md](./SKILL_CATALOG.md)。
 
@@ -147,6 +158,8 @@ npx agent-skill-dock doctor
 - `design-md` 可安裝但實際使用時通常需要 Stitch 專案或 Stitch MCP context。
 - `find-skills` 可能推薦其他第三方 skill；安裝前仍應檢查來源、內容、授權與維護狀態。
 - `skill-creator` 的基本撰寫流程可直接使用，但進階 eval、benchmark 與 viewer 可能需要 Python、對應 agent CLI 或 subagent 支援。
+- `ponytail` 啟用後會在整個 session 持續影響回應風格（偏向最小變更、結尾附上略過項目與風險）；說「stop ponytail」或「normal mode」即可關閉。
+- `gsap-*` 為 GSAP 官方技能組，彼此會互相引用（例如 `gsap-core` 會指向 `gsap-timeline`、`gsap-react`），因此一起安裝。
 
 ## 專案規劃
 

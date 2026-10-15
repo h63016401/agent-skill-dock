@@ -117,6 +117,8 @@ JSCRAIK_DIR="$TMP_DIR/jscraik-agent-skills"
 STITCH_DIR="$TMP_DIR/stitch-skills"
 VERCEL_SKILLS_DIR="$TMP_DIR/vercel-skills"
 SENTRY_SKILLS_DIR="$TMP_DIR/sentry-skills"
+PONYTAIL_DIR="$TMP_DIR/ponytail"
+GSAP_SKILLS_DIR="$TMP_DIR/gsap-skills"
 
 clone_repo https://github.com/anthropics/skills.git "$ANTHROPIC_DIR"
 clone_repo https://github.com/vercel-labs/agent-skills.git "$VERCEL_DIR"
@@ -142,6 +144,17 @@ clone_repo_sparse https://github.com/vercel-labs/skills.git "$VERCEL_SKILLS_DIR"
   skills/find-skills
 clone_repo_sparse https://github.com/getsentry/skills.git "$SENTRY_SKILLS_DIR" \
   skills/code-simplifier
+clone_repo_sparse https://github.com/DietrichGebert/ponytail.git "$PONYTAIL_DIR" \
+  skills/ponytail
+clone_repo_sparse https://github.com/greensock/gsap-skills.git "$GSAP_SKILLS_DIR" \
+  skills/gsap-core \
+  skills/gsap-timeline \
+  skills/gsap-scrolltrigger \
+  skills/gsap-react \
+  skills/gsap-performance \
+  skills/gsap-plugins \
+  skills/gsap-utils \
+  skills/gsap-frameworks
 
 write_metadata() {
   local dest="$1"
@@ -318,6 +331,21 @@ install_to_root() {
     "$target_root" \
     "anthropics/skills" \
     "skills/skill-creator"
+
+  copy_skill "ponytail" \
+    "$PONYTAIL_DIR/skills/ponytail" \
+    "$target_root" \
+    "DietrichGebert/ponytail" \
+    "skills/ponytail"
+
+  for gsap_skill in gsap-core gsap-timeline gsap-scrolltrigger gsap-react \
+    gsap-performance gsap-plugins gsap-utils gsap-frameworks; do
+    copy_skill "$gsap_skill" \
+      "$GSAP_SKILLS_DIR/skills/$gsap_skill" \
+      "$target_root" \
+      "greensock/gsap-skills" \
+      "skills/$gsap_skill"
+  done
 }
 
 if [[ "$SCOPE" == "user" ]]; then

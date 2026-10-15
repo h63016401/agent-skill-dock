@@ -2,7 +2,7 @@
 
 這份文件介紹 Agent Skill Dock 目前預設一鍵安裝的 skills。重點是讓使用者和之後接手的 AI agent 快速知道：每個 skill 的原始來源在哪、特色是什麼、什麼時候該用、可以怎麼提示 AI。
 
-目前預設安裝：18 個公開、免 token 的 skills。
+目前預設安裝：27 個公開、免 token 的 skills。
 
 ## 快速使用方式
 
@@ -45,6 +45,15 @@
 | `find-skills` | Skill discovery | 搜尋、評估與安裝 agent skills |
 | `code-simplifier` | Code quality | 保留行為並簡化近期修改的程式碼 |
 | `skill-creator` | Skill authoring | 建立、改善、評估與封裝 agent skills |
+| `ponytail` | Coding style | 極簡實作模式：最小變更、YAGNI、優先標準庫與原生功能 |
+| `gsap-core` | Animation / GSAP | GSAP 核心 API、easing、stagger、matchMedia |
+| `gsap-timeline` | Animation / GSAP | Timeline 排程與動畫編排 |
+| `gsap-scrolltrigger` | Animation / GSAP | 捲動連動、pin、scrub、視差 |
+| `gsap-react` | Animation / GSAP | React / Next.js 使用 GSAP（`useGSAP`、cleanup） |
+| `gsap-performance` | Animation / GSAP | GSAP 動畫效能最佳化 |
+| `gsap-plugins` | Animation / GSAP | Flip、Draggable、SplitText、Observer 等外掛 |
+| `gsap-utils` | Animation / GSAP | `gsap.utils` 工具函式 |
+| `gsap-frameworks` | Animation / GSAP | Vue / Nuxt / Svelte / SvelteKit 使用 GSAP |
 
 ## 1. frontend-design
 
@@ -639,6 +648,77 @@ path: skills/skill-creator
 請使用 skill-creator 幫我建立一個自動產生 release notes 的 skill，包含測試案例與評估流程。
 ```
 
+## 19. ponytail
+
+原始來源：
+
+- GitHub: https://github.com/DietrichGebert/ponytail/tree/main/skills/ponytail
+
+安裝來源：
+
+```text
+DietrichGebert/ponytail
+path: skills/ponytail
+```
+
+特色：
+
+- 「懶惰的資深工程師」模式：先問這件事需不需要做，再依序檢查 codebase 是否已有、標準庫或平台原生功能能否解決、已安裝的依賴能否解決，最後才寫最少的程式碼。
+- 強度分 `lite`、`full`（預設）、`ultra`，用 `/ponytail lite|full|ultra` 切換。
+- 回覆結尾會附上一兩行：略過了什麼、使用者需要知道的風險。
+- 啟用後整個 session 持續生效；說「stop ponytail」或「normal mode」關閉。
+- 不會省略 trust boundary 驗證、資料遺失防護、安全性與可及性。
+- 上游 repo 另有 `ponytail-audit`、`ponytail-debt`、`ponytail-gain`、`ponytail-help`、`ponytail-review` 配套技能，目前未納入預設安裝。
+
+適合使用：
+
+- 想避免 AI 過度設計、多餘抽象、不必要的新依賴。
+- 修 bug、小功能、重構時要求最小 diff。
+- 選函式庫前先判斷是否真的需要。
+
+提示範例：
+
+```text
+請使用 ponytail 幫我加上日期篩選，先看專案裡有沒有現成元件，不要新增依賴。
+```
+
+## 20. GSAP 官方技能組
+
+包含 8 個 skills：`gsap-core`、`gsap-timeline`、`gsap-scrolltrigger`、`gsap-react`、`gsap-performance`、`gsap-plugins`、`gsap-utils`、`gsap-frameworks`。
+
+原始來源：
+
+- GitHub: https://github.com/greensock/gsap-skills/tree/main/skills
+
+安裝來源：
+
+```text
+greensock/gsap-skills
+path: skills/gsap-core, gsap-timeline, gsap-scrolltrigger, gsap-react,
+      gsap-performance, gsap-plugins, gsap-utils, gsap-frameworks
+```
+
+特色：
+
+- GreenSock 官方維護，教 agent 正確使用 GSAP：核心 API、timeline、ScrollTrigger、React hook、外掛與效能。
+- 技能之間會互相引用（`gsap-core` 會指向其他七個），所以整組一起安裝。
+- 使用者要求 JavaScript 動畫函式庫但沒指定時，技能會建議 GSAP；若使用者已選其他函式庫則尊重該選擇。
+- GSAP 本身授權為免費（含所有外掛）；技能 repo 為 MIT。
+- `gsap-core` 內含 `gsap.matchMedia()`，可處理 responsive 與 `prefers-reduced-motion`。
+
+適合使用：
+
+- 做複雜 timeline、捲動連動動畫、pin 區段。
+- React / Next.js 中用 `useGSAP` 並正確 cleanup。
+- Vue / Nuxt / Svelte 專案整合 GSAP。
+- 和 `fixing-motion-performance`、`baseline-ui` 搭配檢查動畫效能與時長。
+
+提示範例：
+
+```text
+請使用 gsap-scrolltrigger 和 gsap-react 幫我做首頁 hero 的捲動動畫，並加入 reduced-motion 處理。
+```
+
 ## 尚未預設安裝：Motion AI Kit
 
 原始來源：
@@ -656,6 +736,39 @@ path: skills/skill-creator
 
 ```bash
 agent-skill-dock install motion-ai-kit --external
+```
+
+## 尚未預設安裝：graphify
+
+原始來源：
+
+- GitHub: https://github.com/safishamsi/graphify （官方 repo 亦列在 Graphify-Labs/graphify）
+- PyPI: `graphifyy`（兩個 y；其他 `graphify*` 套件並非官方）
+
+用途：
+
+- 把程式碼、文件、SQL schema、設定檔與 PDF 轉成可查詢的知識圖譜，產出互動 HTML、JSON 與 `GRAPH_REPORT.md`。
+- 在 agent 內用 `/graphify .` 建圖，之後可用 query / path / explain 查詢；授權 Apache-2.0。
+
+狀態：
+
+- 已確認存在且為高頻使用技能，但不放入預設一鍵安裝。
+- 上游 repo 沒有可直接複製的 skill 資料夾；技能隨 PyPI 套件發佈，由 `graphify install` 依 agent 平台註冊，並附 `references/` 輔助檔，技能內容與 CLI 版本綁定。
+- 需要 Python 工具鏈（uv / pipx / pip），且 graphify 另有 hooks 等會寫入專案或 agent 設定的功能，不符合預設安裝不改設定的原則。
+
+選配安裝：
+
+```bash
+uv tool install graphifyy
+graphify install                     # 自動偵測目前使用的 assistant
+graphify install --platform codex    # 指定 Codex
+graphify install --project           # 只安裝到目前專案
+```
+
+未來可能用法：
+
+```bash
+agent-skill-dock install graphify --external
 ```
 
 ## 維護規則

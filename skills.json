@@ -292,6 +292,150 @@
       "categories": ["skills", "authoring", "evaluation"],
       "summary": "Create, improve, evaluate, benchmark, and package agent skills.",
       "license": "Apache-2.0"
+    },
+    {
+      "id": "ponytail",
+      "displayName": "Ponytail",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "DietrichGebert/ponytail",
+        "ref": "main",
+        "path": "skills/ponytail"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": ["lazy-mode"],
+      "categories": ["coding", "code-quality", "minimalism", "productivity"],
+      "summary": "Lazy-senior-dev mode: the smallest change that fully solves the task, with YAGNI, stdlib-first, and no needless dependencies.",
+      "license": "MIT"
+    },
+    {
+      "id": "gsap-core",
+      "displayName": "GSAP Core",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "greensock/gsap-skills",
+        "ref": "main",
+        "path": "skills/gsap-core"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "animation", "gsap"],
+      "summary": "Official GSAP core API guidance: tweens, easing, stagger, defaults, and matchMedia for responsive and reduced-motion animation.",
+      "license": "MIT"
+    },
+    {
+      "id": "gsap-timeline",
+      "displayName": "GSAP Timeline",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "greensock/gsap-skills",
+        "ref": "main",
+        "path": "skills/gsap-timeline"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "animation", "gsap"],
+      "summary": "Official GSAP timeline guidance: sequencing, position parameter, nesting, and playback control.",
+      "license": "MIT"
+    },
+    {
+      "id": "gsap-scrolltrigger",
+      "displayName": "GSAP ScrollTrigger",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "greensock/gsap-skills",
+        "ref": "main",
+        "path": "skills/gsap-scrolltrigger"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "animation", "gsap", "scroll"],
+      "summary": "Official GSAP ScrollTrigger guidance for scroll-linked animation, pinning, scrub, and parallax.",
+      "license": "MIT"
+    },
+    {
+      "id": "gsap-react",
+      "displayName": "GSAP React",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "greensock/gsap-skills",
+        "ref": "main",
+        "path": "skills/gsap-react"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "animation", "gsap", "react"],
+      "summary": "Official GSAP guidance for React and Next.js: useGSAP hook, refs, gsap.context(), and cleanup.",
+      "license": "MIT"
+    },
+    {
+      "id": "gsap-performance",
+      "displayName": "GSAP Performance",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "greensock/gsap-skills",
+        "ref": "main",
+        "path": "skills/gsap-performance"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "animation", "gsap", "performance"],
+      "summary": "Official GSAP performance guidance: prefer transforms, avoid layout thrashing, and keep animations smooth.",
+      "license": "MIT"
+    },
+    {
+      "id": "gsap-plugins",
+      "displayName": "GSAP Plugins",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "greensock/gsap-skills",
+        "ref": "main",
+        "path": "skills/gsap-plugins"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "animation", "gsap"],
+      "summary": "Official GSAP plugin guidance: Flip, Draggable, SplitText, ScrollToPlugin, Observer, SVG and physics plugins.",
+      "license": "MIT"
+    },
+    {
+      "id": "gsap-utils",
+      "displayName": "GSAP Utils",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "greensock/gsap-skills",
+        "ref": "main",
+        "path": "skills/gsap-utils"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "animation", "gsap"],
+      "summary": "Official gsap.utils helpers: clamp, mapRange, normalize, interpolate, random, snap, wrap, and pipe.",
+      "license": "MIT"
+    },
+    {
+      "id": "gsap-frameworks",
+      "displayName": "GSAP Frameworks",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "greensock/gsap-skills",
+        "ref": "main",
+        "path": "skills/gsap-frameworks"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["frontend", "animation", "gsap", "vue", "svelte"],
+      "summary": "Official GSAP guidance for Vue, Nuxt, Svelte, and SvelteKit: lifecycle, scoped selectors, and cleanup.",
+      "license": "MIT"
     }
   ]
 }

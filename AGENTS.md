@@ -125,10 +125,24 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
   - 用途：建立、改善、測試、評估、benchmark 與封裝 agent skills。
   - 注意：進階 eval 流程可能需要 Python、對應 agent CLI 或 subagent 支援。
 
+- `ponytail`
+  - 來源：`DietrichGebert/ponytail`, path `skills/ponytail`
+  - 用途：極簡實作模式，要求最小變更、YAGNI、優先標準庫與原生功能。
+  - 注意：啟用後整個 session 持續生效；上游另有 `ponytail-audit/debt/gain/help/review` 配套技能，目前未納入。
+
+- `gsap-core`, `gsap-timeline`, `gsap-scrolltrigger`, `gsap-react`, `gsap-performance`, `gsap-plugins`, `gsap-utils`, `gsap-frameworks`
+  - 來源：`greensock/gsap-skills`, path `skills/<skill-name>`
+  - 用途：GreenSock 官方 GSAP 技能組，涵蓋核心 API、timeline、ScrollTrigger、React、效能、外掛、工具函式與 Vue/Svelte。
+  - 注意：技能之間互相引用，必須整組一起安裝，不要只挑部分。
+
 目前不預設安裝：
 
 - `motion-ai-kit`
   - 原因：需要 Motion token / Motion+，之後應做成 optional external installer。
+
+- `graphify`
+  - 來源：`safishamsi/graphify`（PyPI 套件 `graphifyy`）
+  - 原因：上游沒有可直接複製的 skill 資料夾，技能隨 PyPI 套件發佈並由 `graphify install` 註冊，內容與 CLI 版本綁定；另有 hooks 會寫入專案或 agent 設定。之後應做成 optional external installer。
 
 ## 重要檔案
 
