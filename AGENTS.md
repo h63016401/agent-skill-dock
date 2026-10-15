@@ -135,6 +135,12 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
   - 用途：GreenSock 官方 GSAP 技能組，涵蓋核心 API、timeline、ScrollTrigger、React、效能、外掛、工具函式與 Vue/Svelte。
   - 注意：技能之間互相引用，必須整組一起安裝，不要只挑部分。
 
+- `ppt-master`
+  - 來源：`hugohe3/ppt-master`, path `skills/ppt-master`
+  - 用途：路由式簡報工作流，生成/重建/套版/強化可編輯 PPTX。
+  - 注意：資料夾約 38 MB、約 13,000 個檔案，每個安裝目標一份。SKILL.md 第一步會跑 `scripts/attribution_guard.py`，檢查 `LICENSE`（sha256）、`SPONSORS.md`、`SPONSORS_CN.md` 與 frontmatter metadata，所以必須整個資料夾原樣複製，不可裁剪或改檔；安裝器多寫的 `.agent-skill-dock.json` 不影響檢查。
+  - 注意：不會自動 `pip install`（`requirements.txt` 含 `PyMuPDF` AGPL-3.0）；Windows 的 `python3` 常是 Microsoft Store 別名，會讓完整性檢查失敗，文件已提醒；與 Codex 內建 `presentations`、`pptx-generator` 觸發範圍重疊。
+
 目前不預設安裝：
 
 - `motion-ai-kit`
@@ -145,6 +151,12 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
   - 原因：上游沒有可直接複製的 skill 資料夾，技能隨 PyPI 套件發佈並由 `graphify install` 註冊，內容與 CLI 版本綁定；Claude 平台安裝還會在 `CLAUDE.md` 加入 `## graphify` 區塊。
   - 選配安裝：`--with graphify`（PowerShell：`-With graphify`），實作在 `install.sh` 的 `install_graphify` 與 `install.ps1` 的 `Install-Graphify`。流程：找不到 CLI 時依序 uv → pipx → pip 安裝 `graphifyy`，再執行 `graphify install`（codex 加 `--platform codex`，project scope 加 `--project`）。
   - 守則：dry-run 只印出指令、不執行任何外部命令；已存在的技能預設跳過、`--force` 先備份；graphify 寫入位置是 Claude `~/.claude/skills`（遵循 `CLAUDE_CONFIG_DIR`）與 Codex `~/.codex/skills`，不是 `~/.agents/skills`。
+
+- `cell_su7`（含必要依賴 `cell_no_ai`）
+  - 來源：`yrui-cmd/cell_su7`，skills 在 `plugins/cell_su7/skills/cell_su7` 與 `plugins/cell_su7/skills/cell_no_ai`；依賴另有 `yrui-cmd/cell_no_ai`。
+  - 用途：把科研圖重建成可編輯的 PPTX 或 Illustrator 檔。
+  - 原因：需要第三方付費服務「小描」的 API key；圖片會上傳到第三方；SKILL.md 要求每個新任務前執行 `sync_cell_no_ai.py`，會把 `cell_no_ai` 的 `main` 分支（未釘版本）覆蓋到本機技能，有供應鏈風險；`cell_no_ai` 的功能是去除 AI 圖片水印，文件已加負責任使用提醒。
+  - 現況：只有文件（`SKILL_CATALOG.md`、`README.md`、`CANDIDATE_SKILLS.md`），沒有接上 `--with` 旗標，也沒有放進 `skills.json`。要做成 `--with cell_su7` 前，先釘 commit/tag、處理自動同步，並讓 dry-run 只印指令；不要替使用者保存或轉貼 API key。
 
 ## 重要檔案
 

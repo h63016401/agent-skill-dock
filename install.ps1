@@ -291,6 +291,15 @@ function Install-ToRoot {
       -SourceRepo "greensock/gsap-skills" `
       -SourcePath "skills/$GsapSkill"
   }
+
+  # ppt-master verifies its own LICENSE/SPONSORS files at runtime, so the whole
+  # folder must be copied unchanged.
+  Copy-AgentSkill `
+    -SkillId "ppt-master" `
+    -SourceDir (Join-Path $PptMasterDir "skills/ppt-master") `
+    -TargetRoot $TargetRoot `
+    -SourceRepo "hugohe3/ppt-master" `
+    -SourcePath "skills/ppt-master"
 }
 
 # Print an external command; run it unless -DryRun.
@@ -438,6 +447,7 @@ try {
   $SentrySkillsDir = Join-Path $TmpDir "sentry-skills"
   $PonytailDir = Join-Path $TmpDir "ponytail"
   $GsapSkillsDir = Join-Path $TmpDir "gsap-skills"
+  $PptMasterDir = Join-Path $TmpDir "ppt-master"
 
   Invoke-GitClone -Repo "https://github.com/anthropics/skills.git" -Destination $AnthropicDir
   Invoke-GitClone -Repo "https://github.com/vercel-labs/agent-skills.git" -Destination $VercelDir
@@ -482,6 +492,9 @@ try {
     "skills/gsap-plugins",
     "skills/gsap-utils",
     "skills/gsap-frameworks"
+  )
+  Invoke-GitCloneSparse -Repo "https://github.com/hugohe3/ppt-master.git" -Destination $PptMasterDir -Paths @(
+    "skills/ppt-master"
   )
 
   if ($Scope -eq "user") {

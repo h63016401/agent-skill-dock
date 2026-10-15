@@ -46,6 +46,8 @@ Agent Skill Dock 是一個給 AI coding agent 使用的技能集合與一鍵安�
 
 2026-10-16 追加：`graphify` 改成選配旗標 `--with graphify`（PowerShell：`-With graphify`），不進預設安裝。旗標呼叫官方 CLI（找不到時用 uv → pipx → pip 安裝 `graphifyy`，再執行 `graphify install`；codex 加 `--platform codex`），dry-run 只印出指令不執行。Claude 平台安裝會在 `CLAUDE.md` 加入 `## graphify` 區塊，已在執行前提醒；Codex 技能寫到 `~/.codex/skills/graphify`。
 
+2026-10-16 再追加：加入 `ppt-master`（`hugohe3/ppt-master`, path `skills/ppt-master`），預設安裝數增為 28 個。它是標準 skill 資料夾，但約 38 MB、約 13,000 個檔案，且 SKILL.md 第一步會跑 `attribution_guard.py` 檢查署名檔與 metadata，所以安裝器必須整個資料夾原樣複製。Python 依賴不自動安裝；Windows 的 `python3` 常是 Microsoft Store 別名，文件已提醒。同日把 `cell_su7`（含必要依賴 `cell_no_ai`，`yrui-cmd/cell_su7`）記錄為只有文件、沒有安裝旗標的候選：它需要付費第三方 API key、圖片會上傳、每個任務前會自動同步未釘版本的遠端 `main`，且 `cell_no_ai` 的功能是去除 AI 圖片水印。詳見 `CANDIDATE_SKILLS.md` 第 10 節與 `SKILL_CATALOG.md`。
+
 ### 1. frontend-design
 
 來源：

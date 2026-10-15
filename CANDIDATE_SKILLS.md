@@ -2,15 +2,15 @@
 
 Research date: 2026-06-02, Asia/Taipei.
 
-Updated: 2026-10-16, Asia/Taipei (added local-usage-driven review: `ponytail` and the GSAP set promoted; `graphify` available as the opt-in `--with graphify` installer step; `humanizer-zh-tw`, `canvas-ui-design` kept as candidates).
+Updated: 2026-10-16, Asia/Taipei (added local-usage-driven review: `ponytail` and the GSAP set promoted; `graphify` available as the opt-in `--with graphify` installer step; `humanizer-zh-tw`, `canvas-ui-design` kept as candidates; later the same day `ppt-master` promoted and `cell_su7` recorded as a documented-only candidate).
 
 This file tracks online skill candidates that should be considered for future one-click installation. Candidates are active only when they are also listed in `skills.json` and wired into `install.sh` / `install.ps1`.
 
 Current promotion status:
 
-- Promoted to default install: `impeccable`, Taste curated set, UI Skills repo set, `better-icons`, `design-md`, `find-skills`, `code-simplifier`, `skill-creator`, `ponytail`, GSAP official set (`gsap-*`, 8 skills).
+- Promoted to default install: `impeccable`, Taste curated set, UI Skills repo set, `better-icons`, `design-md`, `find-skills`, `code-simplifier`, `skill-creator`, `ponytail`, GSAP official set (`gsap-*`, 8 skills), `ppt-master`.
 - Optional/external: `graphify` is installable with `--with graphify` / `-With graphify` (ships through the `graphifyy` PyPI package, not a copyable skill folder). Motion AI Kit is still not wired in because it requires a Motion token / Motion+ access.
-- Still candidates: `humanizer-zh-tw`, `canvas-ui-design` (see sections 8 and 9).
+- Still candidates: `humanizer-zh-tw`, `canvas-ui-design` (see sections 8 and 9), `cell_su7` with its required `cell_no_ai` (documented only, no installer flag; see section 10).
 
 ## Summary
 
@@ -25,6 +25,8 @@ Current promotion status:
 | `ponytail` | Yes | `ponytail` | https://github.com/DietrichGebert/ponytail | Promoted |
 | GSAP skills | Yes | `gsap-*` (8 skills) | https://github.com/greensock/gsap-skills | Promoted as a set |
 | Graphify | Yes | `graphify` | https://github.com/safishamsi/graphify | Opt-in installer flag (`--with graphify`) |
+| PPT Master | Yes | `ppt-master` | https://github.com/hugohe3/ppt-master | Promoted: copy whole folder intact, Python deps are manual |
+| cell_su7 | Yes | `cell_su7` + `cell_no_ai` | https://github.com/yrui-cmd/cell_su7 | Candidate: paid third-party API, unpinned auto-sync |
 | Humanizer-zh-TW | Yes | `humanizer-zh-tw` | https://github.com/kevintsai1202/Humanizer-zh-TW | Candidate: needs repo-root copy handling |
 | Canvas UI skill | Yes | `canvas-ui-design` | https://github.com/cskwork/canvas-ui-skill | Candidate: no license declared upstream |
 
@@ -364,6 +366,64 @@ Integration blockers:
 - The GitHub API reports no license for the repo, so do not bundle it until the license is clarified.
 - The repo root is the skill and also contains a `docs/` landing page, so a root-path copy would pull in site assets and `.git` unless an exclude list exists.
 
+## 10. cell_su7 (with cell_no_ai)
+
+Status: found. Not wired into `skills.json` or the installers; documented only. Requested together with `ppt-master`, which was promoted (see below).
+
+Sources:
+
+- GitHub: https://github.com/yrui-cmd/cell_su7 (MIT, v0.4.8, Codex plugin)
+- Required dependency: https://github.com/yrui-cmd/cell_no_ai
+- Skills: `plugins/cell_su7/skills/cell_su7` and `plugins/cell_su7/skills/cell_no_ai`; the repo root also has `install.py`, `install.ps1`, `setup.ps1`, `setup.sh`.
+
+What it is:
+
+- Rebuilds a scientific figure (PNG/JPEG/WebP) as an editable PowerPoint or Adobe Illustrator file: record all text and positions, remove text with an image-editing model, run path recognition, redraw layers back to front, then restore text as editable objects. Deliverables are an editable PPTX (or AI file plus PNG) and `text-manifest.json`.
+- `cell_no_ai` removes AI-image watermarks (mainly SynthID; C2PA is left to later tracing) through the same third-party service. `cell_su7` only uses it after asking the user, but the installer always installs both.
+
+Integration blockers:
+
+- Path recognition and watermark removal run on the paid third-party service Xiaomiao (https://xiaomiao-ai.com/) and need an API key (`img_live_...`) plus credits; images are uploaded (kept 15 minutes for watermark removal, 1 credit each). This breaks the "no token in the default install" rule.
+- `cell_su7`'s SKILL.md tells the agent to run `sync_cell_no_ai.py` before every new task. It clones or downloads `main` of `yrui-cmd/cell_no_ai` and overwrites `SKILL.md`, `agents`, `references`, `scripts` (old files are backed up). That is unpinned remote code auto-updating, so it needs a pinned ref or the sync disabled before any automation.
+- The upstream SKILL.md invites pasting the API key into chat. Key storage scripts exist (`set-xiaomiao-key.ps1` with DPAPI on Windows, Keychain on macOS); docs tell users to use them instead.
+- `cell_no_ai` strips AI provenance marks. Docs carry a responsible-use note: do not use it to evade AI-disclosure rules of journals, platforms, or institutions.
+- Windows PowerPoint playback needs PowerPoint COM; Illustrator uses COM (Windows) or AppleScript (macOS, simulation-tested only upstream).
+
+Upstream install options (not run by the Dock):
+
+```bash
+python install.py [--destination ~/.codex/skills] [--force]
+# or setup.ps1 (Windows) / bash setup.sh (macOS)
+```
+
+Recommended Agent Skill Dock integration:
+
+- Keep documentation only for now.
+- If an opt-in `--with cell_su7` flag is wanted: pin a commit or tag for both repos, disable or neutralise the per-task auto-sync, make dry-run print the commands only, never store or relay the API key, and print the cost and upload warnings before running.
+
+## ppt-master (promoted)
+
+Sources:
+
+- GitHub: https://github.com/hugohe3/ppt-master (MIT, default branch `main`), skill path `skills/ppt-master`, version 6.7.0.
+
+What it is:
+
+- Routed presentation workflow for generating editable PPTX decks, reconstructing page visuals, building reusable Brand/Style/Layout/Deck workspaces, filling native PPTX templates, and enhancing finished decks (narration, animation).
+
+Why it could be promoted:
+
+- It is a normal skill folder with a standard `SKILL.md`, so it uses the existing sparse-clone and `copy_skill` path, installed as a `remote-skill`.
+
+Things the installer cannot fix:
+
+- Size: about 13,000 files and 38 MB (most under `templates/`) per install target, up to three targets.
+- Integrity gate: step 2 of SKILL.md runs `scripts/attribution_guard.py`, which needs `LICENSE` (sha256), `SPONSORS.md`, `SPONSORS_CN.md`, the frontmatter metadata, and the gate files. The folder must be copied whole; the extra `.agent-skill-dock.json` does not matter.
+- Python: the guard is invoked as `python3`. On Windows `python3` is often the Microsoft Store alias (exit code 9009), which stops the skill. Install real Python 3 or disable the alias. Dependencies in `requirements.txt` are not installed by the Dock (`PyMuPDF` is AGPL-3.0, used only for PDF to Markdown).
+- Optional image backends read keys from `.env` (`.env.example` in the skill folder).
+- Overlap: Codex's bundled `presentations` and `pptx-generator` trigger on similar requests; users should name `ppt-master` explicitly.
+- Not yet verified: a real copy of the 30 files with non-ASCII names. Only dry-run was checked.
+
 ## Not installable through the Dock
 
 Several frequently used skills are not in public skill repos:
@@ -382,6 +442,8 @@ Several frequently used skills are not in public skill repos:
 7. `graphify` external installer (done: `--with graphify` flag)
 8. `humanizer-zh-tw` after repo-root copy handling (exclude `.git`) exists
 9. `canvas-ui-design` only after upstream declares a license
+10. `ppt-master` (done: promoted to default install)
+11. `cell_su7` only after the upstream sync is pinned and the cost/upload warnings are wired in
 
 Reasoning:
 

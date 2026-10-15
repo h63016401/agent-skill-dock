@@ -2,7 +2,7 @@
 
 這份文件介紹 Agent Skill Dock 目前預設一鍵安裝的 skills。重點是讓使用者和之後接手的 AI agent 快速知道：每個 skill 的原始來源在哪、特色是什麼、什麼時候該用、可以怎麼提示 AI。
 
-目前預設安裝：27 個公開、免 token 的 skills。
+目前預設安裝：28 個公開、免 token 的 skills。
 
 ## 快速使用方式
 
@@ -19,6 +19,7 @@
 請用 find-skills 幫我找適合做 API 文件的 skill。
 請用 code-simplifier 整理我剛修改的程式碼。
 請用 skill-creator 幫我建立一個 release notes skill。
+請用 ppt-master 把這份報告做成可編輯的 PPTX 簡報。
 ```
 
 不同 agent 對 skill invocation 的語法可能不同；最保險的方式是直接在需求文字中寫出 skill 名稱。
@@ -54,6 +55,7 @@
 | `gsap-plugins` | Animation / GSAP | Flip、Draggable、SplitText、Observer 等外掛 |
 | `gsap-utils` | Animation / GSAP | `gsap.utils` 工具函式 |
 | `gsap-frameworks` | Animation / GSAP | Vue / Nuxt / Svelte / SvelteKit 使用 GSAP |
+| `ppt-master` | Presentation / PPTX | 生成、重建、套版與強化可編輯 PPTX 簡報 |
 
 ## 1. frontend-design
 
@@ -719,6 +721,46 @@ path: skills/gsap-core, gsap-timeline, gsap-scrolltrigger, gsap-react,
 請使用 gsap-scrolltrigger 和 gsap-react 幫我做首頁 hero 的捲動動畫，並加入 reduced-motion 處理。
 ```
 
+## 21. ppt-master
+
+原始來源：
+
+- GitHub: https://github.com/hugohe3/ppt-master/tree/main/skills/ppt-master
+
+安裝來源：
+
+```text
+hugohe3/ppt-master
+path: skills/ppt-master
+```
+
+特色：
+
+- 路由式簡報工作流：由 `workflows/routing.md` 先選定一條路線，再讀對應流程。涵蓋生成可編輯 PPTX、圖片轉 PPTX、重建頁面視覺、建立可重用的 Brand / Style / Layout / Deck workspace、填入原生 PPTX 範本、強化既有 PPTX（含旁白與動畫）。
+- PPTX 轉換工具把受支援的 SVG 元素轉成可編輯的原生 DrawingML 形狀。
+- 資料夾很大：約 13,000 個檔案、約 38 MB，其中絕大多數是 `templates/`。安裝到 Claude、`~/.agents/skills`、`~/.codex/skills` 三個目標就是三份。
+- MIT 授權；技能帶有署名保護機制（見下方注意事項）。
+
+使用前注意：
+
+- 完整性檢查：SKILL.md 第一步會執行 `python3 "${SKILL_DIR}/scripts/attribution_guard.py"`，非 0 就整個停止。它會檢查 `LICENSE`、`SPONSORS.md`、`SPONSORS_CN.md` 是否存在、`LICENSE` 的 sha256、SKILL.md frontmatter 的 metadata，以及指定的 gate 檔。所以資料夾必須整個原樣複製，不能刪署名檔或改 metadata。安裝器多寫的 `.agent-skill-dock.json` 不影響這項檢查。
+- Windows 的 `python3`：Windows 預設的 `python3` 常是 Microsoft Store 別名，執行會直接失敗（exit code 9009），完整性檢查就會讓技能整個停住。請安裝真正的 Python 3，或到「設定 → 應用程式 → 進階應用程式設定 → 應用程式執行別名」關閉 `python3.exe` 的別名；必要時確認 `python3 --version` 有輸出版本號。
+- Python 依賴：安裝器只複製技能，不會 `pip install`。要自己執行 `pip install -r <技能資料夾>/requirements.txt`（多數工具只用標準庫，依賴是依功能選配）。其中 `PyMuPDF` 是 AGPL-3.0，只有 PDF 轉 Markdown 會用到；若不處理 PDF 來源可略過，要再分發前請先看授權。
+- 圖片後端 key（選配）：AI 生圖功能讀 `.env`（範本是技能內的 `.env.example`），需要 Gemini、OpenAI 相容等服務的 API key 與額度。key 請放環境變數或 `.env`，不要貼在聊天裡。
+- 和內建技能重疊：Codex app 內建的 `presentations`、以及 `pptx-generator` 等技能的觸發範圍與它重疊。想用這個技能時，請在需求裡直接寫出 `ppt-master`。
+
+適合使用：
+
+- 把報告、PDF、網頁或一段大綱做成可編輯簡報。
+- 把圖片或截圖形式的簡報重建成可編輯 PPTX。
+- 把公司範本或既有 PPTX 套入新內容、美化與強化。
+
+提示範例：
+
+```text
+請使用 ppt-master，把這份 PDF 整理成 12 頁、可編輯的 PPTX 簡報。
+```
+
 ## 尚未預設安裝：Motion AI Kit
 
 原始來源：
@@ -791,6 +833,53 @@ graphify install --project           # 只安裝到目前專案
 
 ```bash
 agent-skill-dock install graphify --external
+```
+
+## 尚未預設安裝：cell_su7
+
+原始來源：
+
+- GitHub: https://github.com/yrui-cmd/cell_su7 （MIT，v0.4.8，Codex plugin）
+- 必要依賴：https://github.com/yrui-cmd/cell_no_ai
+
+用途：
+
+- 把 PNG / JPEG / WebP 科研圖重建成可編輯的 PowerPoint 或 Adobe Illustrator 檔。流程是先記錄所有文字與位置，用圖像編輯模型只清掉文字，把圖形送去路徑辨識，再依原圖層級由後往前繪製，最後把文字還原成可編輯物件。
+- 交付：可編輯 PPTX，或 AI 檔加最終 PNG，以及 `text-manifest.json`（文字內容、位置、來源畫布座標）。
+- 一個 plugin 內有兩個 skill：`plugins/cell_su7/skills/cell_su7` 與 `plugins/cell_su7/skills/cell_no_ai`。
+
+狀態：
+
+- 已確認存在，不放入預設一鍵安裝，也沒有接上 `--with` 旗標，只記錄在文件。
+- 原因一：路徑辨識與去水印都走第三方付費服務「小描」（https://xiaomiao-ai.com/），需要 API key（`img_live_...`）與額度，依專案規則不進預設。
+- 原因二：`cell_su7` 要求 agent 在每個新任務前執行 `sync_cell_no_ai.py`，它會 clone 或下載 `yrui-cmd/cell_no_ai` 的 `main` 分支並覆蓋 `SKILL.md`、`agents`、`references`、`scripts`（舊檔會備份）。這是沒有釘版本的遠端程式碼自動更新，有供應鏈風險；要釘版本才適合納入。
+- 原因三：`cell_no_ai` 的功能是去除 AI 生成圖片的水印（主要針對 SynthID）。見下方負責任使用。
+- 安裝時兩個 skill 一定會一起裝，但 `cell_no_ai` 只在使用者同意後才會被呼叫。
+
+使用前注意：
+
+- 費用與隱私：圖片會上傳到第三方服務。去水印每張 1 額度、圖片會保留 15 分鐘；路徑辨識約每張 1 元人民幣，實際以官方頁面為準。提交前要先查詢餘額。不要處理未發表、機密或有合約限制的圖。
+- API key：上游 SKILL.md 鼓勵直接把 key 貼進聊天讓助手設定。請不要這樣做，改用上游提供的腳本：Windows 用 `set-xiaomiao-key.ps1`（DPAPI 加密儲存），macOS 存 Keychain。貼進聊天的 key 會留在對話紀錄裡。
+- 平台需求：Windows PowerPoint 逐路徑播放需要 PowerPoint COM；Illustrator 在 Windows 用 COM、macOS 用 AppleScript（macOS Illustrator 上游只做了模擬測試）。
+- 負責任使用：`cell_no_ai` 移除的是 AI 生成標記。用在你自己產生、且期刊或平台政策允許的圖上沒問題；請不要用它讓 AI 生成的圖看起來不是 AI 生成，來規避論文投稿、平台或機構的揭露規定。
+
+官方安裝方式（需要自己審過再執行，不由 Agent Skill Dock 代跑）：
+
+```bash
+git clone https://github.com/yrui-cmd/cell_su7.git
+cd cell_su7
+python install.py --destination ~/.codex/skills        # 加 --force 才會覆蓋既有技能
+# 或 Windows：.\setup.ps1    macOS：bash setup.sh
+```
+
+上游安裝腳本會複製兩個技能、執行一次 `sync_cell_no_ai.py`，再執行 `configure_runtime.py`。建議先讀過這三支腳本再執行。
+
+若之後要做成選配旗標（`--with cell_su7`），前提是：dry-run 只印出指令、不執行；固定 commit 或 tag；停用或移除每個任務前的自動同步；不替使用者保存 key。
+
+提示範例（安裝完成後）：
+
+```text
+用 cell_su7 處理這張原圖，用 PPT 繪製。
 ```
 
 ## 維護規則

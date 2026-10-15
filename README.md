@@ -1,6 +1,6 @@
 # Agent Skill Dock
 
-一鍵安裝常用 AI coding-agent skills，集中管理 Claude Code、Codex 會用到的前端設計、動畫（GSAP）、程式碼品質與極簡實作、技能探索與建立、React/Next.js、React Native/Expo 與網站重建工作流。
+一鍵安裝常用 AI coding-agent skills，集中管理 Claude Code、Codex 會用到的前端設計、動畫（GSAP）、程式碼品質與極簡實作、技能探索與建立、可編輯 PPTX 簡報、React/Next.js、React Native/Expo 與網站重建工作流。
 
 > Status: bootstrap version. 目前先提供 GitHub raw script 一鍵安裝；之後會補上 npm CLI：`npx agent-skill-dock install --all`。
 
@@ -80,6 +80,7 @@ irm https://raw.githubusercontent.com/h63016401/agent-skill-dock/main/install.ps
 | `gsap-plugins` | GSAP 外掛：Flip、Draggable、SplitText、Observer 等 | https://github.com/greensock/gsap-skills |
 | `gsap-utils` | `gsap.utils` 工具函式：clamp、mapRange、snap、wrap 等 | https://github.com/greensock/gsap-skills |
 | `gsap-frameworks` | Vue / Nuxt / Svelte / SvelteKit 使用 GSAP：生命週期與 cleanup | https://github.com/greensock/gsap-skills |
+| `ppt-master` | 生成、重建、套版與強化可編輯 PPTX 簡報（資料夾約 38 MB，需另裝 Python 依賴） | https://github.com/hugohe3/ppt-master |
 
 `Motion AI Kit` 需要 Motion token / Motion+，目前不列入預設一鍵安裝；之後會做成選配 external installer。
 
@@ -94,6 +95,8 @@ curl -fsSL https://raw.githubusercontent.com/h63016401/agent-skill-dock/main/ins
 ```
 
 旗標行為與注意事項請看 [SKILL_CATALOG.md](./SKILL_CATALOG.md#尚未預設安裝graphify)。
+
+`cell_su7`（把科研圖重建成可編輯的 PPTX 或 Illustrator 檔，含必要依賴 `cell_no_ai`）也不列入預設安裝，目前沒有安裝旗標，只有文件說明。原因是它要付費的第三方 API key（小描）、圖片會上傳到第三方，且上游流程會在每個任務前自動同步遠端 `main` 分支的程式碼，沒有釘版本。想用請照 [SKILL_CATALOG.md](./SKILL_CATALOG.md#尚未預設安裝cell_su7) 的官方安裝方式，自己審過上游腳本再執行。來源：https://github.com/yrui-cmd/cell_su7 、https://github.com/yrui-cmd/cell_no_ai 。
 
 每個 skill 的原始來源、特色、適合場景與提示範例請看 [SKILL_CATALOG.md](./SKILL_CATALOG.md)。
 
@@ -172,6 +175,11 @@ npx agent-skill-dock doctor
 - `skill-creator` 的基本撰寫流程可直接使用，但進階 eval、benchmark 與 viewer 可能需要 Python、對應 agent CLI 或 subagent 支援。
 - `ponytail` 啟用後會在整個 session 持續影響回應風格（偏向最小變更、結尾附上略過項目與風險）；說「stop ponytail」或「normal mode」即可關閉。
 - `gsap-*` 為 GSAP 官方技能組，彼此會互相引用（例如 `gsap-core` 會指向 `gsap-timeline`、`gsap-react`），因此一起安裝。
+- `ppt-master` 每個安裝目標約 38 MB、約 13,000 個檔案（Claude、`~/.agents/skills`、`~/.codex/skills` 各一份），首次安裝會比較久。它的 SKILL.md 第一步會執行 `python3 scripts/attribution_guard.py` 檢查 `LICENSE`、`SPONSORS*.md` 與 metadata，所以資料夾必須整個保留，不能刪署名檔。
+- `ppt-master` 的 Python 依賴不會被自動安裝，需自行執行 `pip install -r requirements.txt`（在技能資料夾內）；其中 `PyMuPDF` 是 AGPL-3.0，只有 PDF 轉 Markdown 會用到。AI 生圖功能另需 `.env` 的圖片後端 API key，請勿貼在聊天裡。
+- Windows 上 `python3` 常是 Microsoft Store 別名（執行會失敗），`ppt-master` 的完整性檢查會因此讓技能整個停住。請安裝真正的 Python 3，或在「應用程式執行別名」關閉 `python3.exe`。
+- `ppt-master` 與 Codex 內建的 `presentations`、以及 `pptx-generator` 等簡報技能的觸發範圍重疊；想用它時請在需求裡直接寫出 `ppt-master`。
+- `cell_su7` / `cell_no_ai` 不在預設安裝內：需要付費 API key、圖片會上傳到第三方（去水印每張 1 額度、保留 15 分鐘），且會自動同步未釘版本的遠端程式碼。上游鼓勵把 key 貼進聊天，請改用 `set-xiaomiao-key.ps1`（Windows DPAPI）或 macOS Keychain。`cell_no_ai` 移除的是 AI 圖片水印，請勿用它規避論文或平台的 AI 生成揭露規定。
 - `--with graphify` / `-With graphify` 會真的執行外部指令（從 PyPI 安裝 `graphifyy`、執行 `graphify install`），不加 `--dry-run` / `-DryRun` 才會執行。Claude Code 的安裝還會在 `~/.claude/CLAUDE.md`（`--scope project` 時為 `.claude/CLAUDE.md`）加入 `## graphify` 區塊；Codex 則寫入 `~/.codex/skills/graphify`。已存在的 graphify 技能預設跳過，加 `--force` 會先備份再重裝。
 
 ## 專案規劃

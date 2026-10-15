@@ -143,6 +143,7 @@ VERCEL_SKILLS_DIR="$TMP_DIR/vercel-skills"
 SENTRY_SKILLS_DIR="$TMP_DIR/sentry-skills"
 PONYTAIL_DIR="$TMP_DIR/ponytail"
 GSAP_SKILLS_DIR="$TMP_DIR/gsap-skills"
+PPT_MASTER_DIR="$TMP_DIR/ppt-master"
 
 clone_repo https://github.com/anthropics/skills.git "$ANTHROPIC_DIR"
 clone_repo https://github.com/vercel-labs/agent-skills.git "$VERCEL_DIR"
@@ -179,6 +180,8 @@ clone_repo_sparse https://github.com/greensock/gsap-skills.git "$GSAP_SKILLS_DIR
   skills/gsap-plugins \
   skills/gsap-utils \
   skills/gsap-frameworks
+clone_repo_sparse https://github.com/hugohe3/ppt-master.git "$PPT_MASTER_DIR" \
+  skills/ppt-master
 
 write_metadata() {
   local dest="$1"
@@ -370,6 +373,14 @@ install_to_root() {
       "greensock/gsap-skills" \
       "skills/$gsap_skill"
   done
+
+  # ppt-master verifies its own LICENSE/SPONSORS files at runtime, so the whole
+  # folder must be copied unchanged.
+  copy_skill "ppt-master" \
+    "$PPT_MASTER_DIR/skills/ppt-master" \
+    "$target_root" \
+    "hugohe3/ppt-master" \
+    "skills/ppt-master"
 }
 
 if [[ "$SCOPE" == "user" ]]; then

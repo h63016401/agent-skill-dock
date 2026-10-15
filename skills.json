@@ -436,6 +436,22 @@
       "categories": ["frontend", "animation", "gsap", "vue", "svelte"],
       "summary": "Official GSAP guidance for Vue, Nuxt, Svelte, and SvelteKit: lifecycle, scoped selectors, and cleanup.",
       "license": "MIT"
+    },
+    {
+      "id": "ppt-master",
+      "displayName": "PPT Master",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "hugohe3/ppt-master",
+        "ref": "main",
+        "path": "skills/ppt-master"
+      },
+      "agents": ["claude", "codex"],
+      "aliases": [],
+      "categories": ["presentation", "pptx", "documents"],
+      "summary": "Generate editable PowerPoint decks from documents and prompts. Needs Python dependencies and the whole folder (incl. attribution files) copied intact; about 38 MB per install target.",
+      "license": "MIT"
     }
   ]
 }
