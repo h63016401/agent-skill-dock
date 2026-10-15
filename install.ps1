@@ -7,7 +7,10 @@ param(
 
   [switch]$DryRun,
   [switch]$Force,
-  [switch]$CodexCompat
+  [switch]$CodexCompat,
+
+  [ValidateSet("graphify")]
+  [string[]]$With = @()
 )
 
 $ErrorActionPreference = "Stop"
@@ -290,6 +293,128 @@ function Install-ToRoot {
   }
 }
 
+# Print an external command; run it unless -DryRun.
+function Invoke-ExternalCommand {
+  param(
+    [string]$Command,
+    [string[]]$Arguments = @()
+  )
+
+  $Display = (@($Command) + $Arguments) -join " "
+
+  if ($DryRun) {
+    Write-Host "[dry-run] would run: $Display"
+    return
+  }
+
+  Write-Host "Running: $Display"
+  & $Command @Arguments
+  if ($LASTEXITCODE -ne 0) {
+    throw "Command failed ($LASTEXITCODE): $Display"
+  }
+}
+
+# Where `graphify install` writes its skill for each agent. Its codex platform
+# targets .codex/skills (not .agents/skills) and Claude honors CLAUDE_CONFIG_DIR.
+function Get-GraphifyTargetRoot {
+  param([string]$TargetAgent)
+
+  if ($TargetAgent -eq "claude") {
+    if ($Scope -eq "user" -and $env:CLAUDE_CONFIG_DIR) {
+      return (Join-Path $env:CLAUDE_CONFIG_DIR "skills")
+    }
+    return $ClaudeRoot
+  }
+
+  return $CodexCompatRoot
+}
+
+function Install-GraphifyCli {
+  $Found = Get-Command graphify -ErrorAction SilentlyContinue
+  if ($Found) {
+    Write-Host "graphify CLI found: $($Found.Source)"
+    return
+  }
+
+  if (Get-Command uv -ErrorAction SilentlyContinue) {
+    $InstallCommand = "uv"
+    $InstallArgs = @("tool", "install", "graphifyy")
+  } elseif (Get-Command pipx -ErrorAction SilentlyContinue) {
+    $InstallCommand = "pipx"
+    $InstallArgs = @("install", "graphifyy")
+  } elseif (Get-Command pip -ErrorAction SilentlyContinue) {
+    $InstallCommand = "pip"
+    $InstallArgs = @("install", "graphifyy")
+  } elseif ($DryRun) {
+    Write-Host "Note: none of uv, pipx or pip was found; a real run would stop here."
+    $InstallCommand = "uv"
+    $InstallArgs = @("tool", "install", "graphifyy")
+  } else {
+    throw "graphify needs uv, pipx or pip to install the graphifyy package."
+  }
+
+  Invoke-ExternalCommand -Command $InstallCommand -Arguments $InstallArgs
+
+  if (-not $DryRun -and -not (Get-Command graphify -ErrorAction SilentlyContinue)) {
+    throw "graphifyy was installed but 'graphify' is not on PATH yet. Run 'uv tool update-shell' (or fix PATH), reopen the terminal, then rerun with -With graphify."
+  }
+}
+
+function Install-Graphify {
+  $Agents = @()
+  if ($Agent -eq "claude" -or $Agent -eq "both") { $Agents += "claude" }
+  if ($Agent -eq "codex" -or $Agent -eq "both") { $Agents += "codex" }
+
+  Write-Host "Optional: graphify (PyPI package graphifyy, installed by its official CLI)"
+
+  $Pending = @()
+  foreach ($TargetAgent in $Agents) {
+    $ExistingSkill = Join-Path (Get-GraphifyTargetRoot -TargetAgent $TargetAgent) "graphify"
+    if ((Test-Path $ExistingSkill) -and -not $Force) {
+      Write-Host "Skip existing skill: $ExistingSkill (use -Force to replace)"
+    } else {
+      $Pending += $TargetAgent
+    }
+  }
+
+  if ($Pending.Count -eq 0) {
+    return
+  }
+
+  Install-GraphifyCli
+
+  foreach ($TargetAgent in $Pending) {
+    $ExistingSkill = Join-Path (Get-GraphifyTargetRoot -TargetAgent $TargetAgent) "graphify"
+
+    if (Test-Path $ExistingSkill) {
+      if ($DryRun) {
+        Write-Host "[dry-run] would back up existing skill: $ExistingSkill"
+      } else {
+        $Backup = "$ExistingSkill.backup.$(Get-Date -Format yyyyMMddHHmmss)"
+        Move-Item -Path $ExistingSkill -Destination $Backup
+        Write-Host "Backed up existing skill: $Backup"
+      }
+    }
+
+    $GraphifyArgs = @("install")
+    if ($TargetAgent -eq "codex") { $GraphifyArgs += @("--platform", "codex") }
+    if ($Scope -eq "project") { $GraphifyArgs += "--project" }
+
+    if ($TargetAgent -eq "claude") {
+      if ($Scope -eq "project") {
+        $ClaudeMd = Join-Path (Get-Location) ".claude/CLAUDE.md"
+      } elseif ($env:CLAUDE_CONFIG_DIR) {
+        $ClaudeMd = Join-Path $env:CLAUDE_CONFIG_DIR "CLAUDE.md"
+      } else {
+        $ClaudeMd = Join-Path $HOME ".claude/CLAUDE.md"
+      }
+      Write-Host "Note: graphify install for Claude Code also adds a '## graphify' section to $ClaudeMd"
+    }
+
+    Invoke-ExternalCommand -Command "graphify" -Arguments $GraphifyArgs
+  }
+}
+
 try {
   Write-Host "Agent Skill Dock"
   Write-Host "Target agent: $Agent"
@@ -387,6 +512,10 @@ try {
       Write-Host "Detected existing Codex compatibility path: $CodexCompatRoot"
     }
     Install-ToRoot -TargetRoot $CodexCompatRoot -TargetAgent "codex"
+  }
+
+  if ($With -contains "graphify") {
+    Install-Graphify
   }
 
   if ($DryRun) {

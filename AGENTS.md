@@ -142,7 +142,9 @@ Agent Skill Dock 是一個跨平台的一鍵安裝器，用來集中安裝常用
 
 - `graphify`
   - 來源：`safishamsi/graphify`（PyPI 套件 `graphifyy`）
-  - 原因：上游沒有可直接複製的 skill 資料夾，技能隨 PyPI 套件發佈並由 `graphify install` 註冊，內容與 CLI 版本綁定；另有 hooks 會寫入專案或 agent 設定。之後應做成 optional external installer。
+  - 原因：上游沒有可直接複製的 skill 資料夾，技能隨 PyPI 套件發佈並由 `graphify install` 註冊，內容與 CLI 版本綁定；Claude 平台安裝還會在 `CLAUDE.md` 加入 `## graphify` 區塊。
+  - 選配安裝：`--with graphify`（PowerShell：`-With graphify`），實作在 `install.sh` 的 `install_graphify` 與 `install.ps1` 的 `Install-Graphify`。流程：找不到 CLI 時依序 uv → pipx → pip 安裝 `graphifyy`，再執行 `graphify install`（codex 加 `--platform codex`，project scope 加 `--project`）。
+  - 守則：dry-run 只印出指令、不執行任何外部命令；已存在的技能預設跳過、`--force` 先備份；graphify 寫入位置是 Claude `~/.claude/skills`（遵循 `CLAUDE_CONFIG_DIR`）與 Codex `~/.codex/skills`，不是 `~/.agents/skills`。
 
 ## 重要檔案
 
@@ -236,6 +238,7 @@ bash -n install.sh
 node -e "JSON.parse(require('fs').readFileSync('skills.json','utf8')); console.log('skills.json ok')"
 AGENT_SKILL_DOCK_LOCAL_DIR="$PWD" bash install.sh --dry-run --agent claude
 AGENT_SKILL_DOCK_LOCAL_DIR="$PWD" bash install.sh --dry-run --agent codex
+AGENT_SKILL_DOCK_LOCAL_DIR="$PWD" bash install.sh --dry-run --agent both --with graphify
 ```
 
 如果有 PowerShell:
@@ -243,6 +246,7 @@ AGENT_SKILL_DOCK_LOCAL_DIR="$PWD" bash install.sh --dry-run --agent codex
 ```powershell
 .\install.ps1 -DryRun -Agent claude
 .\install.ps1 -DryRun -Agent codex
+.\install.ps1 -DryRun -Agent both -With graphify
 ```
 
 ## 實作守則
@@ -254,6 +258,7 @@ AGENT_SKILL_DOCK_LOCAL_DIR="$PWD" bash install.sh --dry-run --agent codex
 - macOS/Linux 與 Windows 的功能要盡量同步。
 - 如果改動 Codex install path，記得同時考慮官方 `~/.agents/skills` 與本機相容 `~/.codex/skills`。
 - adapter skill 要明確寫出安全邊界。
+- 外部安裝器（例如 `--with graphify`）必須 opt-in；dry-run 只印出指令、不得執行；會改動 agent 設定檔的行為要在執行前明確提醒。
 - 如果新增 npm CLI，不要移除 bootstrap scripts；保留給不想裝 npm package 的使用者。
 
 ## 下一步建議

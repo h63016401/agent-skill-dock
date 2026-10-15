@@ -752,11 +752,33 @@ agent-skill-dock install motion-ai-kit --external
 
 狀態：
 
-- 已確認存在且為高頻使用技能，但不放入預設一鍵安裝。
+- 已確認存在且為高頻使用技能，不放入預設一鍵安裝，改為 opt-in：`--with graphify`（PowerShell：`-With graphify`）。
 - 上游 repo 沒有可直接複製的 skill 資料夾；技能隨 PyPI 套件發佈，由 `graphify install` 依 agent 平台註冊，並附 `references/` 輔助檔，技能內容與 CLI 版本綁定。
 - 需要 Python 工具鏈（uv / pipx / pip），且 graphify 另有 hooks 等會寫入專案或 agent 設定的功能，不符合預設安裝不改設定的原則。
 
-選配安裝：
+用 Agent Skill Dock 旗標安裝（先 dry-run 預覽，dry-run 只印出指令、不執行任何外部命令）：
+
+```bash
+bash install.sh --dry-run --with graphify
+bash install.sh --with graphify
+bash install.sh --with graphify --agent codex --force
+```
+
+```powershell
+.\install.ps1 -DryRun -With graphify
+.\install.ps1 -With graphify
+```
+
+旗標行為：
+
+- 找不到 `graphify` 時依序用 `uv tool install graphifyy` → `pipx install graphifyy` → `pip install graphifyy`；已在 PATH 就直接使用。
+- Claude Code：執行 `graphify install`。除了技能檔，它還會在 `~/.claude/CLAUDE.md`（遵循 `CLAUDE_CONFIG_DIR`；`--scope project` 時為 `.claude/CLAUDE.md`）加入 `## graphify` 區塊，安裝器會先印出提醒。
+- Codex：執行 `graphify install --platform codex`。技能寫到 `~/.codex/skills/graphify`（不是 `~/.agents/skills`）。
+- `--scope project` 會加上 `--project`。
+- 已存在的 graphify 技能預設跳過；`--force` 會先備份再重裝。
+- 安裝後若 `graphify` 仍不在 PATH，會停止並提示執行 `uv tool update-shell` 後重開終端機。
+
+手動安裝（等同旗標實際執行的指令）：
 
 ```bash
 uv tool install graphifyy

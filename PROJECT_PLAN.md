@@ -44,6 +44,8 @@ Agent Skill Dock 是一個給 AI coding agent 使用的技能集合與一鍵安�
 
 2026-10-16 更新：依本機 Codex session 的實際使用頻率，加入 `ponytail`（`DietrichGebert/ponytail`）與 GSAP 官方技能組 8 個（`greensock/gsap-skills`），預設安裝數增為 27 個。`graphify` 使用頻率也很高，但它隨 PyPI 套件 `graphifyy` 發佈、由 `graphify install` 註冊，沒有可直接複製的 skill 資料夾，因此與 `Motion AI Kit` 一樣保留為 optional external installer。`humanizer-zh-tw`、`canvas-ui-design` 使用較少且有 repo-root 複製與授權問題，列入 `CANDIDATE_SKILLS.md`。
 
+2026-10-16 追加：`graphify` 改成選配旗標 `--with graphify`（PowerShell：`-With graphify`），不進預設安裝。旗標呼叫官方 CLI（找不到時用 uv → pipx → pip 安裝 `graphifyy`，再執行 `graphify install`；codex 加 `--platform codex`），dry-run 只印出指令不執行。Claude 平台安裝會在 `CLAUDE.md` 加入 `## graphify` 區塊，已在執行前提醒；Codex 技能寫到 `~/.codex/skills/graphify`。
+
 ### 1. frontend-design
 
 來源：

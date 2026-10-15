@@ -83,7 +83,17 @@ irm https://raw.githubusercontent.com/h63016401/agent-skill-dock/main/install.ps
 
 `Motion AI Kit` 需要 Motion token / Motion+，目前不列入預設一鍵安裝；之後會做成選配 external installer。
 
-`graphify`（把程式碼、文件、PDF 轉成可查詢的知識圖譜）也不列入預設一鍵安裝：它跟隨 PyPI 套件 `graphifyy` 發佈，需用其官方 CLI 註冊技能。選配安裝方式請看 [SKILL_CATALOG.md](./SKILL_CATALOG.md#尚未預設安裝graphify)。
+`graphify`（把程式碼、文件、PDF 轉成可查詢的知識圖譜）不列入預設安裝，但可用選配旗標安裝：它跟隨 PyPI 套件 `graphifyy` 發佈，旗標會呼叫其官方 CLI（`uv tool install graphifyy`，沒有 uv 時改用 pipx / pip，再執行 `graphify install`）。先用 dry-run 預覽會執行的指令，dry-run 不會執行任何外部指令：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/h63016401/agent-skill-dock/main/install.sh | bash -s -- --dry-run --with graphify
+```
+
+```powershell
+.\install.ps1 -DryRun -With graphify
+```
+
+旗標行為與注意事項請看 [SKILL_CATALOG.md](./SKILL_CATALOG.md#尚未預設安裝graphify)。
 
 每個 skill 的原始來源、特色、適合場景與提示範例請看 [SKILL_CATALOG.md](./SKILL_CATALOG.md)。
 
@@ -124,6 +134,7 @@ bash install.sh --agent codex
 bash install.sh --scope project
 bash install.sh --force
 bash install.sh --codex-compat
+bash install.sh --with graphify
 ```
 
 Windows PowerShell:
@@ -135,6 +146,7 @@ Windows PowerShell:
 .\install.ps1 -Scope project
 .\install.ps1 -Force
 .\install.ps1 -CodexCompat
+.\install.ps1 -With graphify
 ```
 
 ## 之後的 npm CLI 規劃
@@ -160,6 +172,7 @@ npx agent-skill-dock doctor
 - `skill-creator` 的基本撰寫流程可直接使用，但進階 eval、benchmark 與 viewer 可能需要 Python、對應 agent CLI 或 subagent 支援。
 - `ponytail` 啟用後會在整個 session 持續影響回應風格（偏向最小變更、結尾附上略過項目與風險）；說「stop ponytail」或「normal mode」即可關閉。
 - `gsap-*` 為 GSAP 官方技能組，彼此會互相引用（例如 `gsap-core` 會指向 `gsap-timeline`、`gsap-react`），因此一起安裝。
+- `--with graphify` / `-With graphify` 會真的執行外部指令（從 PyPI 安裝 `graphifyy`、執行 `graphify install`），不加 `--dry-run` / `-DryRun` 才會執行。Claude Code 的安裝還會在 `~/.claude/CLAUDE.md`（`--scope project` 時為 `.claude/CLAUDE.md`）加入 `## graphify` 區塊；Codex 則寫入 `~/.codex/skills/graphify`。已存在的 graphify 技能預設跳過，加 `--force` 會先備份再重裝。
 
 ## 專案規劃
 

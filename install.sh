@@ -7,6 +7,7 @@ SCOPE="user"
 DRY_RUN=0
 FORCE=0
 CODEX_COMPAT=0
+WITH_GRAPHIFY=0
 
 usage() {
   cat <<'USAGE'
@@ -22,6 +23,9 @@ Options:
   --force                              Backup and replace existing installed skills
   --codex-compat                       Also install to ~/.codex/skills
                                        Auto-detected in user scope when ~/.codex/skills exists
+  --with graphify                      Also install graphify through its official CLI
+                                        (uv/pipx/pip install graphifyy, then graphify install).
+                                        Opt-in; --dry-run only prints the commands.
   -h, --help                           Show help
 USAGE
 }
@@ -47,6 +51,26 @@ while [[ $# -gt 0 ]]; do
     --codex-compat)
       CODEX_COMPAT=1
       shift
+      ;;
+    --with)
+      with_value="${2:-}"
+      if [[ -z "$with_value" ]]; then
+        echo "Missing value for --with (supported: graphify)" >&2
+        exit 1
+      fi
+      IFS=',' read -r -a with_items <<< "$with_value"
+      for with_item in "${with_items[@]}"; do
+        case "$with_item" in
+          graphify)
+            WITH_GRAPHIFY=1
+            ;;
+          *)
+            echo "Unknown --with value: $with_item (supported: graphify)" >&2
+            exit 1
+            ;;
+        esac
+      done
+      shift 2
       ;;
     -h|--help)
       usage
@@ -376,6 +400,129 @@ if [[ "$CODEX_COMPAT" -eq 1 || ( "$AUTO_CODEX_COMPAT" -eq 1 && ( "$AGENT" == "co
     echo "Detected existing Codex compatibility path: $CODEX_COMPAT_ROOT"
   fi
   install_to_root "$CODEX_COMPAT_ROOT" "codex"
+fi
+
+# Print an external command; run it unless --dry-run.
+run_external() {
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] would run: $*"
+    return
+  fi
+  echo "Running: $*"
+  "$@"
+}
+
+# Where `graphify install` writes its skill for each agent. Its codex platform
+# targets .codex/skills (not .agents/skills) and Claude honors CLAUDE_CONFIG_DIR.
+graphify_target_root() {
+  if [[ "$1" == "claude" ]]; then
+    if [[ "$SCOPE" == "user" && -n "${CLAUDE_CONFIG_DIR:-}" ]]; then
+      echo "$CLAUDE_CONFIG_DIR/skills"
+    else
+      echo "$CLAUDE_ROOT"
+    fi
+  else
+    echo "$CODEX_COMPAT_ROOT"
+  fi
+}
+
+ensure_graphify_cli() {
+  local -a install_cmd
+
+  if command -v graphify >/dev/null 2>&1; then
+    echo "graphify CLI found: $(command -v graphify)"
+    return
+  fi
+
+  if command -v uv >/dev/null 2>&1; then
+    install_cmd=(uv tool install graphifyy)
+  elif command -v pipx >/dev/null 2>&1; then
+    install_cmd=(pipx install graphifyy)
+  elif command -v pip >/dev/null 2>&1; then
+    install_cmd=(pip install graphifyy)
+  elif [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "Note: none of uv, pipx or pip was found; a real run would stop here."
+    install_cmd=(uv tool install graphifyy)
+  else
+    echo "graphify needs uv, pipx or pip to install the graphifyy package." >&2
+    exit 1
+  fi
+
+  run_external "${install_cmd[@]}"
+
+  if [[ "$DRY_RUN" -ne 1 ]] && ! command -v graphify >/dev/null 2>&1; then
+    echo "graphifyy was installed but 'graphify' is not on PATH yet." >&2
+    echo "Run 'uv tool update-shell' (or fix PATH), reopen the terminal, then rerun with --with graphify." >&2
+    exit 1
+  fi
+}
+
+install_graphify() {
+  local -a agents=()
+  local -a pending=()
+  local -a cmd
+  local agent root backup claude_md
+
+  if [[ "$AGENT" == "claude" || "$AGENT" == "both" ]]; then
+    agents+=(claude)
+  fi
+  if [[ "$AGENT" == "codex" || "$AGENT" == "both" ]]; then
+    agents+=(codex)
+  fi
+
+  echo "Optional: graphify (PyPI package graphifyy, installed by its official CLI)"
+
+  for agent in "${agents[@]}"; do
+    root="$(graphify_target_root "$agent")"
+    if [[ -e "$root/graphify" && "$FORCE" -ne 1 ]]; then
+      echo "Skip existing skill: $root/graphify (use --force to replace)"
+    else
+      pending+=("$agent")
+    fi
+  done
+
+  if [[ "${#pending[@]}" -eq 0 ]]; then
+    return
+  fi
+
+  ensure_graphify_cli
+
+  for agent in "${pending[@]}"; do
+    root="$(graphify_target_root "$agent")"
+
+    if [[ -e "$root/graphify" ]]; then
+      if [[ "$DRY_RUN" -eq 1 ]]; then
+        echo "[dry-run] would back up existing skill: $root/graphify"
+      else
+        backup="$root/graphify.backup.$(date +%Y%m%d%H%M%S)"
+        mv "$root/graphify" "$backup"
+        echo "Backed up existing skill: $backup"
+      fi
+    fi
+
+    cmd=(graphify install)
+    if [[ "$agent" == "codex" ]]; then
+      cmd+=(--platform codex)
+    fi
+    if [[ "$SCOPE" == "project" ]]; then
+      cmd+=(--project)
+    fi
+
+    if [[ "$agent" == "claude" ]]; then
+      if [[ "$SCOPE" == "project" ]]; then
+        claude_md="$PWD/.claude/CLAUDE.md"
+      else
+        claude_md="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/CLAUDE.md"
+      fi
+      echo "Note: graphify install for Claude Code also adds a '## graphify' section to $claude_md"
+    fi
+
+    run_external "${cmd[@]}"
+  done
+}
+
+if [[ "$WITH_GRAPHIFY" -eq 1 ]]; then
+  install_graphify
 fi
 
 if [[ "$DRY_RUN" -eq 1 ]]; then

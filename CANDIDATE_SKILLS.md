@@ -2,14 +2,14 @@
 
 Research date: 2026-06-02, Asia/Taipei.
 
-Updated: 2026-10-16, Asia/Taipei (added local-usage-driven review: `ponytail` and the GSAP set promoted; `graphify`, `humanizer-zh-tw`, `canvas-ui-design` kept as candidates).
+Updated: 2026-10-16, Asia/Taipei (added local-usage-driven review: `ponytail` and the GSAP set promoted; `graphify` available as the opt-in `--with graphify` installer step; `humanizer-zh-tw`, `canvas-ui-design` kept as candidates).
 
 This file tracks online skill candidates that should be considered for future one-click installation. Candidates are active only when they are also listed in `skills.json` and wired into `install.sh` / `install.ps1`.
 
 Current promotion status:
 
 - Promoted to default install: `impeccable`, Taste curated set, UI Skills repo set, `better-icons`, `design-md`, `find-skills`, `code-simplifier`, `skill-creator`, `ponytail`, GSAP official set (`gsap-*`, 8 skills).
-- Still optional/external: Motion AI Kit (requires a Motion token / Motion+ access) and `graphify` (ships through the `graphifyy` PyPI package, not a copyable skill folder).
+- Optional/external: `graphify` is installable with `--with graphify` / `-With graphify` (ships through the `graphifyy` PyPI package, not a copyable skill folder). Motion AI Kit is still not wired in because it requires a Motion token / Motion+ access.
 - Still candidates: `humanizer-zh-tw`, `canvas-ui-design` (see sections 8 and 9).
 
 ## Summary
@@ -24,7 +24,7 @@ Current promotion status:
 | `DESIGN.md` | Yes | `design-md` and DESIGN.md format | https://github.com/google-labs-code/stitch-skills | Promoted, Stitch-dependent |
 | `ponytail` | Yes | `ponytail` | https://github.com/DietrichGebert/ponytail | Promoted |
 | GSAP skills | Yes | `gsap-*` (8 skills) | https://github.com/greensock/gsap-skills | Promoted as a set |
-| Graphify | Yes | `graphify` | https://github.com/safishamsi/graphify | Conditional: external installer |
+| Graphify | Yes | `graphify` | https://github.com/safishamsi/graphify | Opt-in installer flag (`--with graphify`) |
 | Humanizer-zh-TW | Yes | `humanizer-zh-tw` | https://github.com/kevintsai1202/Humanizer-zh-TW | Candidate: needs repo-root copy handling |
 | Canvas UI skill | Yes | `canvas-ui-design` | https://github.com/cskwork/canvas-ui-skill | Candidate: no license declared upstream |
 
@@ -318,11 +318,13 @@ graphify install --platform codex
 graphify install --project
 ```
 
-Recommended Agent Skill Dock integration:
+Agent Skill Dock integration (implemented as the opt-in `--with graphify` / `-With graphify` flag):
 
-- Add as `type: "external-installer"`, opt-in only (for example `--with graphify`).
-- Dry-run must print the exact `uv tool install graphifyy` / `graphify install --platform <agent>` commands without running them.
-- Check that `graphify` is on PATH after installing and report the installed CLI version.
+- Opt-in only. If `graphify` is not on PATH, install `graphifyy` with uv, then pipx, then pip; then run `graphify install` (Claude Code) and `graphify install --platform codex` (Codex), adding `--project` for project scope.
+- Dry-run prints the exact commands without running anything.
+- Existing graphify skills are skipped unless `--force`, which backs them up first. The existence check uses graphify's own targets: Claude `~/.claude/skills` (honoring `CLAUDE_CONFIG_DIR`) and Codex `~/.codex/skills`, not `~/.agents/skills`.
+- `graphify install` for Claude Code also appends a `## graphify` section to `CLAUDE.md`; the installer prints a note before running it.
+- Stops with a hint (`uv tool update-shell`) if `graphify` is still not on PATH after installing.
 - Do not vendor `graphify/skill.md` into this repo; it would drift from the CLI version.
 
 ## 8. Humanizer-zh-TW
@@ -377,7 +379,7 @@ Several frequently used skills are not in public skill repos:
 4. `better-icons` skill only
 5. `design-md`
 6. Motion AI Kit external installer
-7. `graphify` external installer
+7. `graphify` external installer (done: `--with graphify` flag)
 8. `humanizer-zh-tw` after repo-root copy handling (exclude `.git`) exists
 9. `canvas-ui-design` only after upstream declares a license
 
