@@ -1,6 +1,6 @@
 # Agent Skill Dock
 
-一鍵安裝常用 AI coding-agent skills，集中管理 Claude Code、Codex 會用到的前端設計、動畫（GSAP）、程式碼品質與極簡實作、技能探索與建立、可編輯 PPTX 簡報、React/Next.js、React Native/Expo 與網站重建工作流。
+一鍵安裝常用 AI coding-agent skills，集中管理 Claude Code、Codex 會用到的前端設計、動畫（GSAP）、程式碼品質與極簡實作、技能探索與建立、可編輯 PPTX 簡報、中文寫作去 AI 味、React/Next.js、React Native/Expo 與網站重建工作流。
 
 > Status: bootstrap version. 目前先提供 GitHub raw script 一鍵安裝；之後會補上 npm CLI：`npx agent-skill-dock install --all`。
 
@@ -81,6 +81,7 @@ irm https://raw.githubusercontent.com/h63016401/agent-skill-dock/main/install.ps
 | `gsap-utils` | `gsap.utils` 工具函式：clamp、mapRange、snap、wrap 等 | https://github.com/greensock/gsap-skills |
 | `gsap-frameworks` | Vue / Nuxt / Svelte / SvelteKit 使用 GSAP：生命週期與 cleanup | https://github.com/greensock/gsap-skills |
 | `ppt-master` | 生成、重建、套版與強化可編輯 PPTX 簡報（資料夾約 38 MB，需另裝 Python 依賴） | https://github.com/hugohe3/ppt-master |
+| `humanizer-zh-tw` | 去除中文文字的 AI 寫作痕跡（附帶 `text-watermark-cleaner-zh-tw`） | https://github.com/kevintsai1202/Humanizer-zh-TW |
 
 `Motion AI Kit` 需要 Motion token / Motion+，目前不列入預設一鍵安裝；之後會做成選配 external installer。
 
@@ -179,6 +180,7 @@ npx agent-skill-dock doctor
 - `ppt-master` 的 Python 依賴不會被自動安裝，需自行執行 `pip install -r requirements.txt`（在技能資料夾內）；其中 `PyMuPDF` 是 AGPL-3.0，只有 PDF 轉 Markdown 會用到。AI 生圖功能另需 `.env` 的圖片後端 API key，請勿貼在聊天裡。
 - Windows 上 `python3` 常是 Microsoft Store 別名（執行會失敗），`ppt-master` 的完整性檢查會因此讓技能整個停住。請安裝真正的 Python 3，或在「應用程式執行別名」關閉 `python3.exe`。
 - `ppt-master` 與 Codex 內建的 `presentations`、以及 `pptx-generator` 等簡報技能的觸發範圍重疊；想用它時請在需求裡直接寫出 `ppt-master`。
+- `humanizer-zh-tw` 的上游是整個 repo（skill 在 repo 根目錄），安裝器會整個複製後移除 `.git`。它讓文字更自然，但不代表內容不是 AI 產出的，也不保證通過 AI 偵測器。
 - `cell_su7` / `cell_no_ai` 不在預設安裝內：需要付費 API key、圖片會上傳到第三方（去水印每張 1 額度、保留 15 分鐘），且會自動同步未釘版本的遠端程式碼。上游鼓勵把 key 貼進聊天，請改用 `set-xiaomiao-key.ps1`（Windows DPAPI）或 macOS Keychain。`cell_no_ai` 移除的是 AI 圖片水印，請勿用它規避論文或平台的 AI 生成揭露規定。
 - `--with graphify` / `-With graphify` 會真的執行外部指令（從 PyPI 安裝 `graphifyy`、執行 `graphify install`），不加 `--dry-run` / `-DryRun` 才會執行。Claude Code 的安裝還會在 `~/.claude/CLAUDE.md`（`--scope project` 時為 `.claude/CLAUDE.md`）加入 `## graphify` 區塊；Codex 則寫入 `~/.codex/skills/graphify`。已存在的 graphify 技能預設跳過，加 `--force` 會先備份再重裝。
 

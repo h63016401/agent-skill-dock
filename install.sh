@@ -144,6 +144,7 @@ SENTRY_SKILLS_DIR="$TMP_DIR/sentry-skills"
 PONYTAIL_DIR="$TMP_DIR/ponytail"
 GSAP_SKILLS_DIR="$TMP_DIR/gsap-skills"
 PPT_MASTER_DIR="$TMP_DIR/ppt-master"
+HUMANIZER_DIR="$TMP_DIR/humanizer-zh-tw"
 
 clone_repo https://github.com/anthropics/skills.git "$ANTHROPIC_DIR"
 clone_repo https://github.com/vercel-labs/agent-skills.git "$VERCEL_DIR"
@@ -182,6 +183,7 @@ clone_repo_sparse https://github.com/greensock/gsap-skills.git "$GSAP_SKILLS_DIR
   skills/gsap-frameworks
 clone_repo_sparse https://github.com/hugohe3/ppt-master.git "$PPT_MASTER_DIR" \
   skills/ppt-master
+clone_repo https://github.com/kevintsai1202/Humanizer-zh-TW.git "$HUMANIZER_DIR"
 
 write_metadata() {
   local dest="$1"
@@ -233,6 +235,8 @@ copy_skill() {
 
   mkdir -p "$dest"
   cp -R "$source_dir"/. "$dest"/
+  # Repo-root skills would drag the clone's .git metadata along; drop it.
+  rm -rf "$dest/.git"
   write_metadata "$dest" "$skill_id" "$source_repo" "$source_path"
   echo "Installed: $dest"
 }
@@ -381,6 +385,14 @@ install_to_root() {
     "$target_root" \
     "hugohe3/ppt-master" \
     "skills/ppt-master"
+
+  # humanizer-zh-tw is the repo root itself, so the whole clone is copied and
+  # copy_skill strips .git.
+  copy_skill "humanizer-zh-tw" \
+    "$HUMANIZER_DIR" \
+    "$target_root" \
+    "kevintsai1202/Humanizer-zh-TW" \
+    "."
 }
 
 if [[ "$SCOPE" == "user" ]]; then

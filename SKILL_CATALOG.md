@@ -2,7 +2,7 @@
 
 這份文件介紹 Agent Skill Dock 目前預設一鍵安裝的 skills。重點是讓使用者和之後接手的 AI agent 快速知道：每個 skill 的原始來源在哪、特色是什麼、什麼時候該用、可以怎麼提示 AI。
 
-目前預設安裝：28 個公開、免 token 的 skills。
+目前預設安裝：29 個公開、免 token 的 skills。
 
 ## 快速使用方式
 
@@ -56,6 +56,7 @@
 | `gsap-utils` | Animation / GSAP | `gsap.utils` 工具函式 |
 | `gsap-frameworks` | Animation / GSAP | Vue / Nuxt / Svelte / SvelteKit 使用 GSAP |
 | `ppt-master` | Presentation / PPTX | 生成、重建、套版與強化可編輯 PPTX 簡報 |
+| `humanizer-zh-tw` | Writing / zh-TW | 去除中文文字的 AI 寫作痕跡（含附帶的 `text-watermark-cleaner-zh-tw`） |
 
 ## 1. frontend-design
 
@@ -760,6 +761,37 @@ path: skills/ppt-master
 ```text
 請使用 ppt-master，把這份 PDF 整理成 12 頁、可編輯的 PPTX 簡報。
 ```
+
+## 22. humanizer-zh-tw
+
+原始來源：
+
+- GitHub: https://github.com/kevintsai1202/Humanizer-zh-TW （MIT）
+
+安裝來源：
+
+```text
+kevintsai1202/Humanizer-zh-TW
+path: .（repo 根目錄就是技能本體，整個複製後移除 .git）
+```
+
+特色：
+
+- 把中文文章、評論、報告裡的公式化表達、空話與重複刪掉，讓文字更自然，同時保留事實、確定程度與作者語氣。
+- 技能資料夾內附 `text-watermark-cleaner-zh-tw`（清理不可見 Unicode 與文字型浮水印的本地腳本），以及 `tests/` 結構檢查。
+
+適合使用：
+
+- 把 AI 產出的中文文字改寫得更像人寫的。
+- 需要清理文字裡的不可見 Unicode 字元時，用資料夾內的 `text-watermark-cleaner-zh-tw`。
+
+提示範例：
+
+```text
+請使用 humanizer-zh-tw 把這段報告摘要改寫得更自然，保留事實與數據。
+```
+
+注意：它讓文字更自然，不代表內容不是 AI 產出的，也不保證通過 AI 偵測器。
 
 ## 尚未預設安裝：Motion AI Kit
 

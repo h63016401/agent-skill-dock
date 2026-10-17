@@ -117,6 +117,10 @@ function Copy-AgentSkill {
 
   New-Item -ItemType Directory -Force -Path $dest | Out-Null
   Copy-Item -Path (Join-Path $SourceDir "*") -Destination $dest -Recurse -Force
+  # Repo-root skills would drag the clone's .git metadata along; drop it.
+  if (Test-Path (Join-Path $dest ".git")) {
+    Remove-Item -Path (Join-Path $dest ".git") -Recurse -Force
+  }
   Write-SkillMetadata -Destination $dest -SkillId $SkillId -SourceRepo $SourceRepo -SourcePath $SourcePath
   Write-Host "Installed: $dest"
 }
@@ -300,6 +304,15 @@ function Install-ToRoot {
     -TargetRoot $TargetRoot `
     -SourceRepo "hugohe3/ppt-master" `
     -SourcePath "skills/ppt-master"
+
+  # humanizer-zh-tw is the repo root itself, so the whole clone is copied and
+  # Copy-AgentSkill strips .git.
+  Copy-AgentSkill `
+    -SkillId "humanizer-zh-tw" `
+    -SourceDir $HumanizerDir `
+    -TargetRoot $TargetRoot `
+    -SourceRepo "kevintsai1202/Humanizer-zh-TW" `
+    -SourcePath "."
 }
 
 # Print an external command; run it unless -DryRun.
@@ -448,6 +461,7 @@ try {
   $PonytailDir = Join-Path $TmpDir "ponytail"
   $GsapSkillsDir = Join-Path $TmpDir "gsap-skills"
   $PptMasterDir = Join-Path $TmpDir "ppt-master"
+  $HumanizerDir = Join-Path $TmpDir "humanizer-zh-tw"
 
   Invoke-GitClone -Repo "https://github.com/anthropics/skills.git" -Destination $AnthropicDir
   Invoke-GitClone -Repo "https://github.com/vercel-labs/agent-skills.git" -Destination $VercelDir
@@ -496,6 +510,7 @@ try {
   Invoke-GitCloneSparse -Repo "https://github.com/hugohe3/ppt-master.git" -Destination $PptMasterDir -Paths @(
     "skills/ppt-master"
   )
+  Invoke-GitClone -Repo "https://github.com/kevintsai1202/Humanizer-zh-TW.git" -Destination $HumanizerDir
 
   if ($Scope -eq "user") {
     $ClaudeRoot = Join-Path $HOME ".claude/skills"

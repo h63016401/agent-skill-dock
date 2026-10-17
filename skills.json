@@ -452,6 +452,22 @@
       "categories": ["presentation", "pptx", "documents"],
       "summary": "Generate editable PowerPoint decks from documents and prompts. Needs Python dependencies and the whole folder (incl. attribution files) copied intact; about 38 MB per install target.",
       "license": "MIT"
+    },
+    {
+      "id": "humanizer-zh-tw",
+      "displayName": "Humanizer zh-TW",
+      "type": "remote-skill",
+      "source": {
+        "provider": "github",
+        "repo": "kevintsai1202/Humanizer-zh-TW",
+        "ref": "main",
+        "path": "."
+      },
+      "agents": ["claude", "codex"],
+      "aliases": ["text-watermark-cleaner-zh-tw"],
+      "categories": ["writing", "humanizer", "zh-tw"],
+      "summary": "Rewrite Chinese text to remove formulaic AI-writing traces while keeping facts and the author's voice. The skill is the repo root, so the installer copies the whole repo and strips .git; the nested text-watermark-cleaner-zh-tw skill comes along.",
+      "license": "MIT"
     }
   ]
 }
